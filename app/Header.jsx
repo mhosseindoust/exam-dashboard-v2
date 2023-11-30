@@ -6,29 +6,65 @@ import UserAvatar from '/public/images/default/user.jpg'
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { App, Button } from 'antd'
-import { SignOutAlt } from 'react-flaticons'
+import { BarcodeScan, Dashboard, SignOutAlt } from 'react-flaticons'
 import callAxios from '@/helpers/callAxios'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { useAuth } from '@/provider/AuthProvider'
+import classNames from 'classnames'
 
 function Header(props) {
   const [loadingLogout, setLoadingLogout] = useState(false)
   const router = useRouter()
   const { message } = App.useApp()
+  const pathname = usePathname()
+  const { user } = useAuth()
+
+  const menuItems = [
+    { label: 'داشبورد', key: '/', icon: <Dashboard /> },
+    { label: 'اسکن', key: '/scan', icon: <BarcodeScan />, access_type: 'is_staff' },
+  ]
+
+  const filteredMenuItems = menuItems.filter((item) => {
+    if (item.access_type) {
+      return (item.access_type === 'is_staff' && user.is_staff) || (item.access_type === 'is_student' && !user.is_staff)
+    }
+    return true
+  })
+  const isMenuItemActive = (key) => {
+    return key === '/' ? pathname === key : pathname.startsWith(key)
+  }
 
   return (
     <div>
       <header className='bg-primary shadow-md border-b border-b-white/20'>
         <div className='container justify-between items-center py-2.5 flex'>
-          <div className='flex items-center'>
+          <div className='flex items-center flex-1'>
             <Link href='/'>
               <Image src={LogoImage} alt='logo image' width={100} />
             </Link>
+            <ul className='flex  gap-2 list-none items-center mt-auto mb-0'>
+              {filteredMenuItems.map((item) => (
+                <Link href={item.key} key={item.key}>
+                  <li
+                    className={classNames('px-5 rounded-md no-underline !text-white flex items-center gap-2 h-10', {
+                      'bg-white/10': isMenuItemActive(item.key),
+                      'hover:bg-white/5': !isMenuItemActive(item.key),
+                    })}
+                  >
+                    {item.icon}
+                    {item.label}
+                  </li>
+                </Link>
+              ))}
+            </ul>
           </div>
           <div className='flex gap-2 items-center'>
             <Image src={UserAvatar} alt='' width={40} height={40} className='rounded-lg' />
             <div className='flex flex-col'>
               <span className='text-[11px] text-white font-thin'>خوش آمدید</span>
-              <span className='text-[11px] text-white '>test</span>
+              <span className='text-[11px] text-white '>
+                {user.first_name} {user.last_name}
+              </span>
             </div>
             <Button
               type='primary'
