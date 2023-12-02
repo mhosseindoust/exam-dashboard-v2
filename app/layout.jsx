@@ -28,6 +28,15 @@ export default function RootLayout({ children }) {
                 // controlPaddingHorizontal: 20,
                 colorPrimary: '#3f0ecc',
               },
+              components: {
+                Breadcrumb: {
+                  itemColor: 'rgba(255,255,255,0.5)',
+                  linkColor: 'rgba(255,255,255,0.5)',
+                  lastItemColor: 'rgba(255,255,255,1)',
+                  linkHoverColor: 'rgba(255,255,255,1)',
+                  separatorColor: 'rgba(255,255,255,0.5)',
+                },
+              },
             }}
           >
             <SWRProvider>

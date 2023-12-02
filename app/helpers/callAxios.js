@@ -20,9 +20,9 @@ instance.interceptors.request.use(
     //   config.headers.Authorization = `Bearer ${session.accessToken}`
     // }
 
-    if (config.url.startsWith('/v2')) {
-      config.baseURL = process.env.NEXT_PUBLIC_BACKEND_URL_V2
-    }
+    // if (config.url.startsWith('/v2')) {
+    //   config.baseURL = process.env.NEXT_PUBLIC_BACKEND_URL_V2
+    // }
     return config
   },
   function (error) {
