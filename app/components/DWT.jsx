@@ -3,7 +3,7 @@ import { App, Button, Checkbox, Collapse, Divider, Form, Modal, Radio, Select, S
 import { Edit, FlipHorizontal, Reflect, RotateLeft, RotateRight, Trash } from 'react-flaticons'
 import Dynamsoft from 'dwt'
 
-export default function Dwt({ scan, onWebTWAINReady }) {
+export default function Dwt({ scan, onWebTWAINReady, extraSideBar }) {
   const { message, modal } = App.useApp()
   const [form] = Form.useForm()
 
@@ -39,7 +39,8 @@ export default function Dwt({ scan, onWebTWAINReady }) {
   const initializeViewer = (DWObject) => {
     DWObject.Viewer.createThumbnailViewer().show()
     dwt.current = DWObject
-    DWObject.Viewer.setViewMode(5, 5)
+    DWObject.Viewer.setViewMode(1, 1)
+    DWObject.Viewer.createThumbnailViewer().show()
   }
 
   const configureDWT = () => {
@@ -106,12 +107,17 @@ export default function Dwt({ scan, onWebTWAINReady }) {
       label: 'اسکن',
       children: <ScannerForm form={form} scanners={scanners} scan={scan} dwt={dwt.current} />,
     },
+    {
+      key: '2',
+      label: '',
+      children: <div>{extraSideBar}</div>,
+    },
   ]
 
   return (
     <div className='grid grid-cols-3 gap-2 p-2'>
       <div>
-        <Collapse items={collapseItems} defaultActiveKey={['1']} />
+        <Collapse items={collapseItems} defaultActiveKey={['1', '2']} />
       </div>
       <div className='col-span-2'>
         <ScannerViewer
@@ -182,7 +188,7 @@ const ScannerForm = ({ form, scanners, scan, dwt }) => {
     <Form
       onFinish={(settings) => scan(dwt, settings)}
       form={form}
-      initialValues={{ adf: true, duplex: true, showUi: false, pixelType: 2, resolution: 400 }}
+      initialValues={{ adf: true, duplex: true, showUi: false, pixelType: 2, resolution: 100 }}
     >
       <Form.Item name='scanner' label='اسکنر'>
         <Select options={scanners.map((scanner) => ({ label: scanner, value: scanner }))} />

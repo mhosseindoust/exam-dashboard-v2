@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "cp -r node_modules/dwt/dist public/dwt-resources",
+    "predev": "cp -r node_modules/dwt/dist public/dwt-resources && cp -r node_modules/dynamsoft-javascript-barcode/dist public/dbr-resources",
     "dev": "next dev -H 127.0.0.1",
     "build": "next build",
     "start": "next start",
@@ -15,6 +15,7 @@
     "axios": "^1.6.2",
     "classnames": "^2.3.2",
     "dwt": "^18.4.1",
+    "dynamsoft-javascript-barcode": "^9.6.31",
     "next": "14.0.3",
     "next-auth": "^4.24.5",
     "prettier": "^3.1.0",
