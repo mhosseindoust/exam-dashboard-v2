@@ -3,7 +3,9 @@
 import dynamic from 'next/dynamic'
 import { BarcodeReader } from 'dynamsoft-javascript-barcode'
 import React, { useEffect, useRef, useState } from 'react'
-import { Button, Progress } from 'antd'
+import { Progress } from 'antd'
+import callAxios from '@/helpers/callAxios'
+import Compressor from 'compressorjs'
 
 let barcodeScanner
 
@@ -90,15 +92,40 @@ export default function Page(props) {
           barcodeScanner
             .decode(blob)
             .then((results) => {
-              const barcodes = results.map((result) => ({
+              let barcodes = results.map((result) => ({
                 barcode: result.barcodeText,
                 y: result.localizationResult.y1,
               }))
 
               if (barcodes.length > 0 && barcodes[0].barcode.includes('-')) {
                 if (barcodes.length > 1 && barcodes[1].barcode.split('-').length === 3) {
-                  console.log(barcodes)
-                  updateUploadStatus(outputInfo.imageId, 'success')
+                  barcodes = barcodes.sort((a, b) => a.y - b.y)
+                  const exam_user_id = barcodes
+                    .filter((barcode) => barcode.barcode.split('-').length === 3)[0]
+                    .barcode.replace(/-/g, '')
+                  const validBarcodes = barcodes.filter((barcode) => !barcode.barcode.includes('-'))
+                  new Compressor(blob, {
+                    quality: 0.4,
+                    success(compressedBlob) {
+                      const formData = new FormData()
+                      formData.append('file', compressedBlob, `${outputInfo.imageId}.jpg`)
+                      formData.append('exam_user_id', exam_user_id)
+                      formData.append('barcodes', JSON.stringify(validBarcodes))
+
+                      callAxios
+                        .post('/exam/upload_scanned/', formData)
+                        .then((response) => {
+                          updateUploadStatus(outputInfo.imageId, 'success')
+                        })
+                        .catch((error) => {
+                          updateUploadStatus(outputInfo.imageId, 'failed')
+                        })
+                    },
+                    error: (err) => {
+                      updateUploadStatus(outputInfo.imageId, 'failed')
+                      console.error('Image compression error:', err.message)
+                    },
+                  })
                 } else {
                   updateUploadStatus(outputInfo.imageId, 'failed')
                 }
@@ -114,15 +141,40 @@ export default function Page(props) {
                     barcodeScanner
                       .decode(blob)
                       .then((results) => {
-                        const barcodes = results.map((result) => ({
+                        let barcodes = results.map((result) => ({
                           barcode: result.barcodeText,
                           y: result.localizationResult.y1,
                         }))
 
                         if (barcodes.length > 0 && barcodes[0].barcode.includes('-')) {
                           if (barcodes.length > 1 && barcodes[1].barcode.split('-').length === 3) {
-                            console.log(barcodes)
-                            updateUploadStatus(outputInfo.imageId, 'success')
+                            barcodes = barcodes.sort((a, b) => a.y - b.y)
+                            const exam_user_id = barcodes
+                              .filter((barcode) => barcode.barcode.split('-').length === 3)[0]
+                              .barcode.replace(/-/g, '')
+                            const validBarcodes = barcodes.filter((barcode) => !barcode.barcode.includes('-'))
+                            new Compressor(blob, {
+                              quality: 0.4,
+                              success(compressedBlob) {
+                                const formData = new FormData()
+                                formData.append('file', compressedBlob, `${outputInfo.imageId}.jpg`)
+                                formData.append('exam_user_id', exam_user_id)
+                                formData.append('barcodes', JSON.stringify(validBarcodes))
+
+                                callAxios
+                                  .post('/exam/upload_scanned/', formData)
+                                  .then((response) => {
+                                    updateUploadStatus(outputInfo.imageId, 'success')
+                                  })
+                                  .catch((error) => {
+                                    updateUploadStatus(outputInfo.imageId, 'failed')
+                                  })
+                              },
+                              error: (err) => {
+                                updateUploadStatus(outputInfo.imageId, 'failed')
+                                console.error('Image compression error:', err.message)
+                              },
+                            })
                           } else {
                             updateUploadStatus(outputInfo.imageId, 'failed')
                           }
@@ -179,12 +231,6 @@ export default function Page(props) {
               <Progress type='circle' percent={100} size={50} format={() => countSuccess} />
               <Progress type='circle' percent={100} status='exception' size={50} format={() => countFailed} />
             </div>
-
-            {/*<div className='mt-3'>*/}
-            {/*  <Button block disabled={countInProgress || (countSuccess === 0 && countFailed === 0)}>*/}
-            {/*    فیلتر آپلود نشده ها*/}
-            {/*  </Button>*/}
-            {/*</div>*/}
           </div>
         }
       />

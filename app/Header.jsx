@@ -6,7 +6,7 @@ import UserAvatar from '/public/images/default/user.jpg'
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { App, Button, Divider } from 'antd'
-import { BarcodeScan, Dashboard, ListCheck, SignOutAlt, Test } from 'react-flaticons'
+import { BarcodeScan, ClipboardList, Dashboard, ListCheck, SignOutAlt, Test } from 'react-flaticons'
 import callAxios from '@/helpers/callAxios'
 import { usePathname, useRouter } from 'next/navigation'
 import { useAuth } from '@/provider/AuthProvider'
@@ -21,8 +21,9 @@ function Header(props) {
 
   const menuItems = [
     { label: 'داشبورد', key: '/', icon: <Dashboard /> },
-    { label: 'آزمون ها', key: '/exam', icon: <ListCheck />, access_type: 'is_staff' },
+    { label: 'آزمون ها', key: '/exam', icon: <ClipboardList />, access_type: 'is_staff' },
     { label: 'اسکن', key: '/scan', icon: <BarcodeScan />, access_type: 'is_staff' },
+    { label: 'تصحیح برگه ها', key: '/correction', icon: <ListCheck />, access_type: 'is_staff' },
   ]
 
   const filteredMenuItems = menuItems.filter((item) => {
