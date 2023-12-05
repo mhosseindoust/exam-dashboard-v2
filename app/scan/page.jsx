@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import { BarcodeReader } from 'dynamsoft-javascript-barcode'
 import React, { useEffect, useRef, useState } from 'react'
-import { Progress } from 'antd'
+import { Progress, Spin } from 'antd'
 import callAxios from '@/helpers/callAxios'
 import Compressor from 'compressorjs'
 

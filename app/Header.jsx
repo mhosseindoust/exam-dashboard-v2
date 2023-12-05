@@ -23,7 +23,6 @@ function Header(props) {
     { label: 'داشبورد', key: '/', icon: <Dashboard /> },
     { label: 'آزمون ها', key: '/exam', icon: <ClipboardList />, access_type: 'is_staff' },
     { label: 'اسکن', key: '/scan', icon: <BarcodeScan />, access_type: 'is_staff' },
-    { label: 'تصحیح برگه ها', key: '/correction', icon: <ListCheck />, access_type: 'is_staff' },
   ]
 
   const filteredMenuItems = menuItems.filter((item) => {
