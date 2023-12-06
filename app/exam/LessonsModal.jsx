@@ -4,7 +4,7 @@ import { Card, Modal, Spin } from 'antd'
 import { useRouter } from 'next/navigation'
 
 const LessonsModal = ({ exam_id }) => {
-  const { data, isLoading, error } = useSWR(`/exam/${exam_id}/lessons/`)
+  const { data, isLoading, error } = useSWR(`/exam/${exam_id}/lessons`)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const router = useRouter()
