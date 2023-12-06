@@ -24,10 +24,20 @@ const LessonsModal = ({ exam_id }) => {
       </Modal>
     )
 
+  if (error) {
+    return (
+      <Modal title='درس های آزمون' open={isModalOpen} footer={null} onCancel={() => setIsModalOpen(false)}>
+        <div className='text-center my-5'>
+          <div className='text-red-500'>خطا در دریافت اطلاعات</div>
+        </div>
+      </Modal>
+    )
+  }
+
   return (
     <Modal title='درس های آزمون' open={isModalOpen} footer={null} onCancel={() => setIsModalOpen(false)} width={1000}>
       <div className='grid grid-cols-3 gap-3'>
-        {data.map((item) => (
+        {data?.map((item) => (
           <Card
             key={item.id}
             title={`${item.lesson.title} (${item.lesson.id})`}
