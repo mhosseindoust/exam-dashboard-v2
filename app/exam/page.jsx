@@ -3,16 +3,19 @@
 import React, { useState } from 'react'
 import PageHead from '@/components/PageHead'
 import PageBody from '@/components/PageBody'
-import { Badge, Modal, Table } from 'antd'
+import { Badge, Button, Modal, Table, Tooltip } from 'antd'
 import useSWR from 'swr'
 import Link from 'next/link'
 import { UtcToPersianDateTime } from '@/utils/dateFormat'
 import classnames from 'classnames'
 import LessonsModal from '@/exam/LessonsModal'
+import { Refresh } from 'react-flaticons'
+import ExamSyncModal from '@/exam/ExamSyncModal'
 
 function Page(props) {
   const { data, isLoading, error } = useSWR('/exam/')
   const [examSelected, setExamSelected] = useState(null)
+  const [examSyncSelected, setExamSyncSelected] = useState(null)
 
   const columns = [
     {
@@ -55,6 +58,38 @@ function Page(props) {
         </div>
       ),
     },
+    {
+      title: 'اعمال',
+      width: '10%',
+      render: (record, { id }) => (
+        <div className='flex items-center justify-center gap-3'>
+          <Link href={`/exam/${id}/users`}>
+            <Button size='small'>دانش آموزان</Button>
+          </Link>
+
+          {/*<Tooltip title='کارنامه ها'>*/}
+          {/*  <Link href={`/exam/${record.id}/schools`}>*/}
+          {/*    <Button icon={<Ballot />} size={'small'} />*/}
+          {/*  </Link>*/}
+          {/*</Tooltip>*/}
+          <Tooltip title='همگام سازی'>
+            <Button size='small' icon={<Refresh className='p-0.5' />} onClick={() => setExamSyncSelected(record)} />
+          </Tooltip>
+          {/*<Tooltip title='پردازش'>*/}
+          {/*  <Popconfirm*/}
+          {/*    title='پردازش'*/}
+          {/*    description='آیا میخواهید آزمون پردازش شود ؟'*/}
+          {/*    onConfirm={() => processExam(record.id)}*/}
+          {/*    okButtonProps={{*/}
+          {/*      loading: confirmProcessLoading,*/}
+          {/*    }}*/}
+          {/*  >*/}
+          {/*    <Button size={'small'} icon={<Gears />} />*/}
+          {/*  </Popconfirm>*/}
+          {/*</Tooltip>*/}
+        </div>
+      ),
+    },
   ]
 
   return (
@@ -66,6 +101,7 @@ function Page(props) {
         <Table size={'small'} columns={columns} dataSource={data} rowKey={(record) => record.id} loading={isLoading} />
       </PageBody>
       {examSelected && <LessonsModal exam_id={examSelected} />}
+      {examSyncSelected && <ExamSyncModal exam={examSyncSelected} setExam={setExamSyncSelected} />}
     </div>
   )
 }
