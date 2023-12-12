@@ -83,7 +83,7 @@ function Page({ params }) {
               <Button loading={submitLoading} onClick={() => setEditingKey('')} icon={<Cross width='10px' />}></Button>
               <Button loading={submitLoading} type='primary' onClick={() => form.submit()} icon={<Check width='10px' />}></Button>
             </div>
-          ) : score ? (
+          ) : score !== null ? (
             <div
               className='cursor-pointer hover:border-solid hover:border-gray-200 hover:px-3 transition-all'
               onClick={() => edit(record)}
