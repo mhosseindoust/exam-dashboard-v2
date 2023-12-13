@@ -14,7 +14,7 @@ import ExamSyncModal from '@/exam/ExamSyncModal'
 
 function Page(props) {
   const { data, isLoading, error } = useSWR('/exam/')
-  const [examSelected, setExamSelected] = useState(null)
+  const [examLessonSelected, setExamLessonSelected] = useState(null)
   const [examSyncSelected, setExamSyncSelected] = useState(null)
 
   const columns = [
@@ -46,13 +46,13 @@ function Page(props) {
     },
     {
       title: 'سوالات ',
-      render: (_, { id, user_question_count, user_question_corrected_count }) => (
+      render: (record, { id, user_question_count, user_question_corrected_count }) => (
         <div
           className={classnames('w-20 text-white text-center rounded hover:cursor-pointer select-none', {
             'bg-green-600 hover:bg-green-500 ': user_question_count === user_question_corrected_count,
             'bg-primary hover:bg-primary/80': user_question_count !== user_question_corrected_count,
           })}
-          onClick={() => setExamSelected(id)}
+          onClick={() => setExamLessonSelected(record)}
         >
           {user_question_corrected_count} / {user_question_count}
         </div>
@@ -100,7 +100,7 @@ function Page(props) {
       <PageBody error={error} loading={isLoading}>
         <Table size={'small'} columns={columns} dataSource={data} rowKey={(record) => record.id} loading={isLoading} />
       </PageBody>
-      {examSelected && <LessonsModal exam_id={examSelected} />}
+      {examLessonSelected && <LessonsModal exam={examLessonSelected} setExam={setExamLessonSelected} />}
       {examSyncSelected && <ExamSyncModal exam={examSyncSelected} setExam={setExamSyncSelected} />}
     </div>
   )

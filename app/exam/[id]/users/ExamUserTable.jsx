@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import useSWR from 'swr'
 import { Input, Table } from 'antd'
+import classnames from 'classnames'
 
 const ExamUserTable = ({ examId }) => {
   const { data, isLoading } = useSWR(`/exam/${examId}/users/`)
@@ -11,7 +12,7 @@ const ExamUserTable = ({ examId }) => {
   const columns = [
     {
       title: 'ID',
-      dataIndex: 'id',
+      dataIndex: 'exam_user_id',
     },
     {
       title: 'نام',
@@ -44,6 +45,19 @@ const ExamUserTable = ({ examId }) => {
     {
       title: 'کلاس',
       dataIndex: ['classroom', 'title'],
+    },
+    {
+      title: 'سوالات ',
+      render: (_, { question_count, question_corrected_count }) => (
+        <div
+          className={classnames('w-20 text-white text-center rounded hover:cursor-pointer select-none', {
+            'bg-green-600 hover:bg-green-500 ': question_count === question_corrected_count,
+            'bg-primary hover:bg-primary/80': question_count !== question_corrected_count,
+          })}
+        >
+          {question_corrected_count} / {question_count}
+        </div>
+      ),
     },
   ]
 
