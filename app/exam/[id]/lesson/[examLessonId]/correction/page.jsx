@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import useSWR from 'swr'
 import PageHead from '@/components/PageHead'
 import PageBody from '@/components/PageBody'
-import { Badge, Button, Form, InputNumber, Table, Image, Spin, App } from 'antd'
+import { Badge, Button, Form, InputNumber, Table, Image, Spin, App, Input } from 'antd'
 import { Check, Cross, Marker } from 'react-flaticons'
 import useSWRImmutable from 'swr/immutable'
 import callAxios from '@/helpers/callAxios'
@@ -19,6 +19,7 @@ function Page({ params }) {
   const [editingKey, setEditingKey] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
   const { message } = App.useApp()
+  const [searchText, setSearchText] = useState('')
 
   const edit = (record) => {
     form.setFieldsValue({ score: record.score })
@@ -138,6 +139,15 @@ function Page({ params }) {
     },
   ]
 
+  const filteredData = data?.filter((item) => {
+    return searchText
+      .toLowerCase()
+      .split(' ')
+      .every((term) =>
+        [item.full_name?.toLowerCase(), item.username?.toLowerCase()].some((field) => field && field.includes(term)),
+      )
+  })
+
   return (
     <div>
       <PageHead
@@ -149,11 +159,14 @@ function Page({ params }) {
         ]}
       ></PageHead>
       <PageBody error={error}>
+        <Input onChange={(e) => setSearchText(e.target.value)} className='mb-3' placeholder='جستجو دانش آموزان ...' />
+
         <Form form={form} component={false} onFinish={onSubmit}>
           <Table
             size={'small'}
             columns={columns}
-            dataSource={data}
+            // dataSource={data}
+            dataSource={searchText ? filteredData : data}
             rowKey={(record) => record.id}
             loading={isLoading}
             // components={{
