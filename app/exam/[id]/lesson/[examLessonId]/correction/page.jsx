@@ -45,6 +45,8 @@ function Page({ params }) {
     {
       title: 'ID',
       dataIndex: 'id',
+      defaultSortOrder: 'ascend',
+      sorter: (a, b) => a.id - b.id,
     },
     {
       title: 'نام و نام خانوادگی',
@@ -64,19 +66,17 @@ function Page({ params }) {
     {
       title: 'مدرسه',
       dataIndex: ['school', 'title'],
-      filters: Array.from(new Set(data?.map((item) => item.school?.title))).map((name) => ({ text: name, value: name })),
+      filters: Array.from(new Set(data?.map((item) => item.school?.title)))
+        .sort()
+        .map((name) => ({ text: name, value: name })),
       onFilter: (value, record) => record.school?.title === value,
+      filterSearch: true,
     },
     {
       title: 'کلاس',
       dataIndex: ['classroom', 'title'],
     },
 
-    // {
-    //   title: 'شماره سوال',
-    //   width: '150px',
-    //   dataIndex: 'question_number',
-    // },
     {
       title: 'نمره',
       width: '185px',
@@ -116,7 +116,11 @@ function Page({ params }) {
       ),
     },
     {
-      title: 'پاسخ',
+      title: 'سوالات',
+      filters: Array.from(new Set(data?.map((item) => item.question_number)))
+        .sort((a, b) => a - b)
+        .map((name) => ({ text: name, value: name })),
+      onFilter: (value, record) => record.question_number === value,
       dataIndex: 'answer_image',
       render: (_, { question_number }) => (
         <Badge count={`سوال ${question_number}`}>
