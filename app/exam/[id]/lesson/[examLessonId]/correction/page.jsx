@@ -48,13 +48,30 @@ function Page({ params }) {
     },
     {
       title: 'نام و نام خانوادگی',
-      width: '50%',
-      render: (_, { first_name, last_name, username }) => `${first_name} ${last_name} (${username})`,
+      // width: '50%',
+      render: (_, { full_name, username }) => `${full_name} (${username})`,
     },
     // {
-    //   title: 'آزمون',
-    //   render: (_, { exam_id, exam_title }) => `${exam_title} (${exam_id})`,
+    //   title: 'مقطع',
+    //   dataIndex: ['grade', 'full_title'],
     // },
+    {
+      title: 'نمایندگی',
+      dataIndex: ['agency', 'name'],
+      filters: Array.from(new Set(data?.map((item) => item.agency?.name))).map((name) => ({ text: name, value: name })),
+      onFilter: (value, record) => record.agency?.name === value,
+    },
+    {
+      title: 'مدرسه',
+      dataIndex: ['school', 'title'],
+      filters: Array.from(new Set(data?.map((item) => item.school?.title))).map((name) => ({ text: name, value: name })),
+      onFilter: (value, record) => record.school?.title === value,
+    },
+    {
+      title: 'کلاس',
+      dataIndex: ['classroom', 'title'],
+    },
+
     // {
     //   title: 'شماره سوال',
     //   width: '150px',

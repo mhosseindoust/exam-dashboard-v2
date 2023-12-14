@@ -39,8 +39,11 @@ const ExamUserTable = ({ examId }) => {
     {
       title: 'مدرسه',
       dataIndex: ['school', 'title'],
-      filters: Array.from(new Set(data?.map((item) => item.school?.title))).map((name) => ({ text: name, value: name })),
+      filters: Array.from(new Set(data?.map((item) => item.school?.title)))
+        .sort()
+        .map((name) => ({ text: name, value: name })),
       onFilter: (value, record) => record.school?.title === value,
+      filterSearch: true,
     },
     {
       title: 'کلاس',
@@ -48,14 +51,17 @@ const ExamUserTable = ({ examId }) => {
     },
     {
       title: 'سوالات ',
-      render: (_, { question_count, question_corrected_count }) => (
-        <div
-          className={classnames('w-20 text-white text-center rounded hover:cursor-pointer select-none', {
-            'bg-green-600 hover:bg-green-500 ': question_count === question_corrected_count,
-            'bg-primary hover:bg-primary/80': question_count !== question_corrected_count,
-          })}
-        >
-          {question_corrected_count} / {question_count}
+      render: (_, { question_count, question_corrected_count, question_scanned_count }) => (
+        <div className='flex items-center justify-center'>
+          <div
+            className={classnames('w-20 text-white text-center rounded hover:cursor-pointer select-none', {
+              'bg-green-600 hover:bg-green-500 ': question_count === question_corrected_count,
+              'bg-primary hover:bg-primary/80': question_count !== question_corrected_count,
+            })}
+          >
+            {question_corrected_count} / {question_scanned_count}
+          </div>
+          <div className='mr-1'> / {question_count}</div>
         </div>
       ),
     },
