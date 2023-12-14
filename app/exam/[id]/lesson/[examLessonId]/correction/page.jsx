@@ -81,6 +81,9 @@ function Page({ params }) {
     {
       title: 'نمره',
       width: '185px',
+      filters: [{ text: 'نمره داده نشده', value: null }],
+      onFilter: (value, record) => record.score === null,
+      defaultFilteredValue: [null],
       render: (record, { id, score }) => (
         <div>
           {id === editingKey ? (
