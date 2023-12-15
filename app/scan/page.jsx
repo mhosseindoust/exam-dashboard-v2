@@ -119,15 +119,18 @@ export default function Page(props) {
                         })
                         .catch((error) => {
                           updateUploadStatus(outputInfo.imageId, 'failed')
+                          console.log('1-',error)
                         })
                     },
                     error: (err) => {
                       updateUploadStatus(outputInfo.imageId, 'failed')
                       console.error('Image compression error:', err.message)
+                      console.log('2-',error)
                     },
                   })
                 } else {
                   updateUploadStatus(outputInfo.imageId, 'failed')
+                  console.log('3-')
                 }
 
                 // DWObject.TagImages([imageIndex], 'success')
@@ -167,27 +170,32 @@ export default function Page(props) {
                                     updateUploadStatus(outputInfo.imageId, 'success')
                                   })
                                   .catch((error) => {
+                                    console.log('4-',error)
                                     updateUploadStatus(outputInfo.imageId, 'failed')
                                   })
                               },
                               error: (err) => {
                                 updateUploadStatus(outputInfo.imageId, 'failed')
-                                console.error('Image compression error:', err.message)
+                                console.error('5-','Image compression error:', err.message)
                               },
                             })
                           } else {
                             updateUploadStatus(outputInfo.imageId, 'failed')
+                            console.log('6-')
                           }
                         } else {
                           updateUploadStatus(outputInfo.imageId, 'failed')
+                          console.log('7-')
                         }
                       })
                       .catch(() => {
                         updateUploadStatus(outputInfo.imageId, 'failed')
+                        console.log('8-')
                       })
                   },
                   function (errorCode, errorString) {
                     updateUploadStatus(outputInfo.imageId, 'failed')
+                    console.log('9-')
                   },
                 )
 
@@ -199,11 +207,13 @@ export default function Page(props) {
             .catch(() => {
               // DWObject.TagImages([imageIndex], 'failed')
               updateUploadStatus(outputInfo.imageId, 'failed')
+              console.log('10-')
             })
         },
         function (errorCode, errorString) {
           console.log(errorString)
           updateUploadStatus(outputInfo.imageId, 'failed')
+          console.log('11-')
 
           // DWObject.TagImages([imageIndex], 'failed')
         },
