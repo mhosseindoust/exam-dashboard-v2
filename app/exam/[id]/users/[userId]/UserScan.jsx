@@ -108,106 +108,39 @@ const UserScan = ({ examId, userId }) => {
               }))
 
               if (barcodes.length > 0 && barcodes[0].barcode.includes('-')) {
-                if (barcodes.length > 1 && barcodes[1].barcode.split('-').length === 3) {
-                  barcodes = barcodes.sort((a, b) => a.y - b.y)
-                  const exam_user_id = barcodes
-                    .filter((barcode) => barcode.barcode.split('-').length === 3)[0]
-                    .barcode.replace(/-/g, '')
-                  const validBarcodes = barcodes.filter((barcode) => !barcode.barcode.includes('-'))
-                  new Compressor(blob, {
-                    quality: 0.4,
-                    success(compressedBlob) {
-                      const formData = new FormData()
-                      formData.append('file', compressedBlob, `${outputInfo.imageId}.jpg`)
-                      formData.append('exam_user_id', exam_user_id)
-                      formData.append('barcodes', JSON.stringify(validBarcodes))
+                barcodes = barcodes.sort((a, b) => a.y - b.y)
+                // const exam_user_id = barcodes
+                //   .filter((barcode) => barcode.barcode.split('-').length === 3)[0]
+                //   .barcode.replace(/-/g, '')
+                const validBarcodes = barcodes.filter((barcode) => !barcode.barcode.includes('-'))
+                new Compressor(blob, {
+                  quality: 0.4,
+                  success(compressedBlob) {
+                    const formData = new FormData()
+                    formData.append('file', compressedBlob, `${outputInfo.imageId}.jpg`)
+                    // formData.append('exam_user_id', exam_user_id)
+                    formData.append('barcodes', JSON.stringify(validBarcodes))
 
-                      callAxios
-                        .post(`/exam/${examId}/users/${userId}/upload_scanned/`, formData)
-                        .then((response) => {
-                          updateUploadStatus(outputInfo.imageId, 'success')
-                        })
-                        .catch((error) => {
-                          updateUploadStatus(outputInfo.imageId, 'failed')
-                          console.log('1-', error)
-                        })
-                    },
-                    error: (err) => {
-                      updateUploadStatus(outputInfo.imageId, 'failed')
-                      console.error('Image compression error:', err.message)
-                      console.log('2-', err)
-                    },
-                  })
-                } else {
-                  updateUploadStatus(outputInfo.imageId, 'failed')
-                  console.log('3-')
-                }
+                    callAxios
+                      .post(`/exam/${examId}/users/${userId}/upload_scanned/`, formData)
+                      .then((response) => {
+                        updateUploadStatus(outputInfo.imageId, 'success')
+                      })
+                      .catch((error) => {
+                        updateUploadStatus(outputInfo.imageId, 'failed')
+                        console.log('1-', error)
+                      })
+                  },
+                  error: (err) => {
+                    updateUploadStatus(outputInfo.imageId, 'failed')
+                    console.error('Image compression error:', err.message)
+                    console.log('2-', err)
+                  },
+                })
 
                 // DWObject.TagImages([imageIndex], 'success')
               } else {
-                DWObject.Rotate(imageIndex, 180, true) // Rotate the image 180 degrees
-                // Retrieve the rotated image as a blob
-                DWObject.ConvertToBlob(
-                  [DWObject.ImageIDToIndex(outputInfo.imageId)],
-                  Dynamsoft.DWT.EnumDWT_ImageType.IT_JPG,
-                  function (blob) {
-                    barcodeScanner
-                      .decode(blob)
-                      .then((results) => {
-                        let barcodes = results.map((result) => ({
-                          barcode: result.barcodeText,
-                          y: result.localizationResult.y1,
-                        }))
-
-                        if (barcodes.length > 0 && barcodes[0].barcode.includes('-')) {
-                          if (barcodes.length > 1 && barcodes[1].barcode.split('-').length === 3) {
-                            barcodes = barcodes.sort((a, b) => a.y - b.y)
-                            const exam_user_id = barcodes
-                              .filter((barcode) => barcode.barcode.split('-').length === 3)[0]
-                              .barcode.replace(/-/g, '')
-                            const validBarcodes = barcodes.filter((barcode) => !barcode.barcode.includes('-'))
-                            new Compressor(blob, {
-                              quality: 0.4,
-                              success(compressedBlob) {
-                                const formData = new FormData()
-                                formData.append('file', compressedBlob, `${outputInfo.imageId}.jpg`)
-                                formData.append('exam_user_id', exam_user_id)
-                                formData.append('barcodes', JSON.stringify(validBarcodes))
-
-                                callAxios
-                                  .post(`/exam/${examId}/users/${userId}/upload_scanned/`, formData)
-                                  .then((response) => {
-                                    updateUploadStatus(outputInfo.imageId, 'success')
-                                  })
-                                  .catch((error) => {
-                                    console.log('4-', error)
-                                    updateUploadStatus(outputInfo.imageId, 'failed')
-                                  })
-                              },
-                              error: (err) => {
-                                updateUploadStatus(outputInfo.imageId, 'failed')
-                                console.error('5-', 'Image compression error:', err.message)
-                              },
-                            })
-                          } else {
-                            updateUploadStatus(outputInfo.imageId, 'failed')
-                            console.log('6-')
-                          }
-                        } else {
-                          updateUploadStatus(outputInfo.imageId, 'failed')
-                          console.log('7-')
-                        }
-                      })
-                      .catch(() => {
-                        updateUploadStatus(outputInfo.imageId, 'failed')
-                        console.log('8-')
-                      })
-                  },
-                  function (errorCode, errorString) {
-                    updateUploadStatus(outputInfo.imageId, 'failed')
-                    console.log('9-')
-                  },
-                )
+                updateUploadStatus(outputInfo.imageId, 'failed')
 
                 // updateUploadStatus(outputInfo.imageId, 'failed')
 
