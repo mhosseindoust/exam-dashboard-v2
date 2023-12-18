@@ -1,11 +1,13 @@
 'use client'
 
+import React, { useEffect, useRef, useState } from 'react'
+import SectionBuilder from '@/components/SectionBuilder'
 import dynamic from 'next/dynamic'
 import { BarcodeReader } from 'dynamsoft-javascript-barcode'
-import React, { useEffect, useRef, useState } from 'react'
 import { Progress, Spin } from 'antd'
 import callAxios from '@/helpers/callAxios'
 import Compressor from 'compressorjs'
+import { useSWRConfig } from 'swr'
 
 let barcodeScanner
 
@@ -15,15 +17,17 @@ BarcodeReader.createInstance().then((reader) => {
   barcodeScanner = reader
 })
 
-const DWT = dynamic(() => import('../components/DWT'), {
+const DWT = dynamic(() => import('../../../../components/DWT'), {
   ssr: false,
 })
 
-export default function Page(props) {
+const UserScan = ({ examId, userId }) => {
   const [uploads, setUploads] = useState([])
   const [finishScan, setFinishScan] = useState(false)
 
   const DWObjectRef = useRef(null)
+
+  const { mutate } = useSWRConfig()
 
   useEffect(() => {
     if (finishScan && uploads.filter((upload) => !upload.success && !upload.failed).length === 0) {
@@ -36,6 +40,9 @@ export default function Page(props) {
   }, [uploads])
 
   const updateUploadStatus = (imageId, status) => {
+    if (status === 'success') {
+      mutate(`/exam/${examId}/users/${userId}/corrections`)
+    }
     setUploads((prevUploads) =>
       prevUploads.map((upload) =>
         upload.id === imageId ? { ...upload, success: status === 'success', failed: status === 'failed' } : upload,
@@ -116,19 +123,19 @@ export default function Page(props) {
                       formData.append('barcodes', JSON.stringify(validBarcodes))
 
                       callAxios
-                        .post('/exam/upload_scanned/', formData)
+                        .post(`/exam/${examId}/users/${userId}/upload_scanned/`, formData)
                         .then((response) => {
                           updateUploadStatus(outputInfo.imageId, 'success')
                         })
                         .catch((error) => {
                           updateUploadStatus(outputInfo.imageId, 'failed')
-                          console.log('1-',error)
+                          console.log('1-', error)
                         })
                     },
                     error: (err) => {
                       updateUploadStatus(outputInfo.imageId, 'failed')
                       console.error('Image compression error:', err.message)
-                      console.log('2-',error)
+                      console.log('2-', err)
                     },
                   })
                 } else {
@@ -168,18 +175,18 @@ export default function Page(props) {
                                 formData.append('barcodes', JSON.stringify(validBarcodes))
 
                                 callAxios
-                                  .post('/exam/upload_scanned/', formData)
+                                  .post(`/exam/${examId}/users/${userId}/upload_scanned/`, formData)
                                   .then((response) => {
                                     updateUploadStatus(outputInfo.imageId, 'success')
                                   })
                                   .catch((error) => {
-                                    console.log('4-',error)
+                                    console.log('4-', error)
                                     updateUploadStatus(outputInfo.imageId, 'failed')
                                   })
                               },
                               error: (err) => {
                                 updateUploadStatus(outputInfo.imageId, 'failed')
-                                console.error('5-','Image compression error:', err.message)
+                                console.error('5-', 'Image compression error:', err.message)
                               },
                             })
                           } else {
@@ -227,26 +234,29 @@ export default function Page(props) {
   const countSuccess = uploads.filter((upload) => upload.success).length
   const countFailed = uploads.filter((upload) => upload.failed).length
   const countInProgress = uploads.filter((upload) => !upload.success && !upload.failed).length
-
   const inProcessPercent = uploads.length > 0 ? ((countInProgress / uploads.length) * 100).toFixed(2) : 0
 
   return (
     <div>
-      <DWT
-        scan={handleScan}
-        onWebTWAINReady={handleWebTWAINReady}
-        extraSideBar={
-          <div>
-            {countInProgress ? (
-              <Progress percent={100 - inProcessPercent} status='active' format={(percent) => countInProgress} />
-            ) : null}
-            <div className='flex justify-around'>
-              <Progress type='circle' percent={100} size={50} format={() => countSuccess} />
-              <Progress type='circle' percent={100} status='exception' size={50} format={() => countFailed} />
+      <SectionBuilder title='اسکن'>
+        <DWT
+          scan={handleScan}
+          onWebTWAINReady={handleWebTWAINReady}
+          extraSideBar={
+            <div>
+              {countInProgress ? (
+                <Progress percent={100 - inProcessPercent} status='active' format={(percent) => countInProgress} />
+              ) : null}
+              <div className='flex justify-around'>
+                <Progress type='circle' percent={100} size={50} format={() => countSuccess} />
+                <Progress type='circle' percent={100} status='exception' size={50} format={() => countFailed} />
+              </div>
             </div>
-          </div>
-        }
-      />
+          }
+        />
+      </SectionBuilder>
     </div>
   )
 }
+
+export default UserScan

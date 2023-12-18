@@ -4,10 +4,12 @@ import React, { useState } from 'react'
 import useSWR from 'swr'
 import { Input, Table } from 'antd'
 import classnames from 'classnames'
+import { useRouter } from 'next/navigation'
 
 const ExamUserTable = ({ examId }) => {
   const { data, isLoading } = useSWR(`/exam/${examId}/users/`)
   const [searchText, setSearchText] = useState('')
+  const router = useRouter()
 
   const columns = [
     {
@@ -51,13 +53,14 @@ const ExamUserTable = ({ examId }) => {
     },
     {
       title: 'سوالات ',
-      render: (_, { question_count, question_corrected_count, question_scanned_count }) => (
+      render: (_, { user_id, question_count, question_corrected_count, question_scanned_count }) => (
         <div className='flex items-center justify-center'>
           <div
             className={classnames('w-20 text-white text-center rounded hover:cursor-pointer select-none', {
               'bg-green-600 hover:bg-green-500 ': question_count === question_corrected_count,
               'bg-primary hover:bg-primary/80': question_count !== question_corrected_count,
             })}
+            onClick={(e) => router.push(`/exam/${examId}/users/${user_id}`)}
           >
             {question_corrected_count} / {question_scanned_count}
           </div>
