@@ -12,7 +12,7 @@ import callAxios from '@/helpers/callAxios'
 function Page({ params }) {
   const { id: examId, examLessonId } = params
 
-  const { data, error, isLoading, mutate } = useSWR(`/exam/${examId}/lessons/${examLessonId}/corrections`)
+  const { data, error, isLoading, mutate } = useSWRImmutable(`/exam/${examId}/lessons/${examLessonId}/corrections`)
   const { data: examData } = useSWRImmutable(`/exam/${examId}`)
   const { data: lessonData } = useSWRImmutable(`/exam/${examId}/lessons`)
   const [form] = Form.useForm()
@@ -32,7 +32,13 @@ function Page({ params }) {
     callAxios
       .post('/exam/grader/scores/', { score: values['score'], question_score_id: editingKey })
       .then((response) => {
-        mutate()
+        const newData = data.map((item) => {
+          if (item.id === editingKey) {
+            return { ...item, score: values['score'] }
+          }
+          return item
+        })
+        mutate(newData, { revalidate: false })
         message.success('نمره با موفقیت ثبت شد')
         setEditingKey(null)
       })
