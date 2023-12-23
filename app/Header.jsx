@@ -36,7 +36,7 @@ function Header(props) {
   }
 
   return (
-    <header className='bg-primary'>
+    <header className='bg-primary print:hidden'>
       <div className='container justify-between items-center py-2.5 flex  '>
         <div className='flex items-center flex-1'>
           <Link href='/'>

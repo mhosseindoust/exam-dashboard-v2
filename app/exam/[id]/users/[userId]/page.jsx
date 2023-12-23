@@ -7,6 +7,7 @@ import SectionBuilder from '@/components/SectionBuilder'
 import UserScore from '@/exam/[id]/users/[userId]/UserScore'
 import UserAnswer from '@/exam/[id]/users/[userId]/UserAnswer'
 import UserScan from '@/exam/[id]/users/[userId]/UserScan'
+import UserInfo from '@/exam/[id]/users/[userId]/UserInfo'
 
 async function getExamUser(examId, userId) {
   const cookie = cookies()
@@ -41,7 +42,7 @@ async function Page({ params }) {
       />
 
       <PageBody withoutLayout>
-        <SectionBuilder title='اطلاعات'></SectionBuilder>
+        <UserInfo examUser={examUser} />
         <UserScan examId={examUser.exam.id} userId={examUser.user.id} />
         <UserScore examId={examUser.exam.id} userId={examUser.user.id} />
         <UserAnswer examId={examUser.exam.id} userId={examUser.user.id} />

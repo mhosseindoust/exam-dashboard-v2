@@ -59,38 +59,39 @@ const UserAnswer = ({ userId, examId }) => {
       title: 'نمره',
       width: '185px',
       render: (record, { id, score }) => (
-        <div>
-          {id === editingKey ? (
-            <div className='flex items-center gap-2'>
-              <Form.Item name='score' rules={[{ required: true }]} className='mb-0  '>
-                <InputNumber
-                  min='0'
-                  max={record.question_score}
-                  step='0.25'
-                  // stringMode
-                  controls={{
-                    upIcon: <div>+0.25</div>,
-                    downIcon: <div>-0.25</div>,
-                  }}
-                  disabled={submitLoading}
-                />
-              </Form.Item>
-              <Button loading={submitLoading} onClick={() => setEditingKey('')} icon={<Cross width='10px' />}></Button>
-              <Button loading={submitLoading} type='primary' onClick={() => form.submit()} icon={<Check width='10px' />}></Button>
-            </div>
-          ) : score !== null ? (
-            <div
-            // className='cursor-pointer hover:border-solid hover:border-gray-200 hover:px-3 transition-all'
-            // onClick={() => edit(record)}
-            >
-              {score}
-            </div>
-          ) : (
-            <Button block onClick={() => edit(record)}>
-              ورود نمره
-            </Button>
-          )}
-        </div>
+        <div>{score}</div>
+        // <div>
+        //   {id === editingKey ? (
+        //     <div className='flex items-center gap-2'>
+        //       <Form.Item name='score' rules={[{ required: true }]} className='mb-0  '>
+        //         <InputNumber
+        //           min='0'
+        //           max={record.question_score}
+        //           step='0.25'
+        //           // stringMode
+        //           controls={{
+        //             upIcon: <div>+0.25</div>,
+        //             downIcon: <div>-0.25</div>,
+        //           }}
+        //           disabled={submitLoading}
+        //         />
+        //       </Form.Item>
+        //       <Button loading={submitLoading} onClick={() => setEditingKey('')} icon={<Cross width='10px' />}></Button>
+        //       <Button loading={submitLoading} type='primary' onClick={() => form.submit()} icon={<Check width='10px' />}></Button>
+        //     </div>
+        //   ) : score !== null ? (
+        //     <div
+        //     className='cursor-pointer hover:border-solid hover:border-gray-200 hover:px-3 transition-all'
+        //     onClick={() => edit(record)}
+        //     >
+        //       {score}
+        //     </div>
+        //   ) : (
+        //     <Button block onClick={() => edit(record)}>
+        //       ورود نمره
+        //     </Button>
+        //   )}
+        // </div>
       ),
     },
     {

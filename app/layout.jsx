@@ -7,6 +7,7 @@ import StyledComponentsRegistry from '@/provider/AntdProvider'
 import { SWRProvider } from '@/provider/SwrProvider'
 import Header from '@/Header'
 import { AuthProvider } from '@/provider/AuthProvider'
+import StyledJsxProvider from '@/provider/StyledJsxProvider'
 
 export const metadata = {
   title: 'Create Next App',
@@ -39,14 +40,16 @@ export default function RootLayout({ children }) {
               },
             }}
           >
-            <SWRProvider>
-              <AntdApp>
-                <AuthProvider>
-                  <Header />
-                  <main>{children}</main>
-                </AuthProvider>
-              </AntdApp>
-            </SWRProvider>
+            <StyledJsxProvider>
+              <SWRProvider>
+                <AntdApp>
+                  <AuthProvider>
+                    <Header />
+                    <main>{children}</main>
+                  </AuthProvider>
+                </AntdApp>
+              </SWRProvider>
+            </StyledJsxProvider>
           </AntdConfigProvider>
         </StyledComponentsRegistry>
       </body>

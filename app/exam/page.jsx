@@ -3,19 +3,34 @@
 import React, { useState } from 'react'
 import PageHead from '@/components/PageHead'
 import PageBody from '@/components/PageBody'
-import { Badge, Button, Modal, Table, Tooltip } from 'antd'
+import { App, Badge, Button, Modal, Popconfirm, Table, Tooltip } from 'antd'
 import useSWR from 'swr'
 import Link from 'next/link'
 import { UtcToPersianDateTime } from '@/utils/dateFormat'
 import classnames from 'classnames'
 import LessonsModal from '@/exam/LessonsModal'
-import { Refresh } from 'react-flaticons'
+import { Gears, Refresh } from 'react-flaticons'
 import ExamSyncModal from '@/exam/ExamSyncModal'
+import callAxios from '@/helpers/callAxios'
 
 function Page(props) {
   const { data, isLoading, error } = useSWR('/exam/')
   const [examLessonSelected, setExamLessonSelected] = useState(null)
   const [examSyncSelected, setExamSyncSelected] = useState(null)
+  const [confirmProcessLoading, setConfirmProcessLoading] = useState(false)
+
+  const { message } = App.useApp()
+
+  function processExam(exam_id) {
+    setConfirmProcessLoading(true)
+    callAxios
+      .get(`/exam/${exam_id}/process/`)
+      .then((response) => {
+        message.success('با موفقیت پردازش انجام شد.')
+      })
+      .catch((e) => message.error(e.errorData.msg))
+      .finally(() => setConfirmProcessLoading(false))
+  }
 
   const columns = [
     {
@@ -66,27 +81,25 @@ function Page(props) {
           <Link href={`/exam/${id}/users`}>
             <Button size='small'>دانش آموزان</Button>
           </Link>
+          <Link href={`/exam/${id}/schools`}>
+            <Button size='small'>مدرسه ها</Button>
+          </Link>
 
-          {/*<Tooltip title='کارنامه ها'>*/}
-          {/*  <Link href={`/exam/${record.id}/schools`}>*/}
-          {/*    <Button icon={<Ballot />} size={'small'} />*/}
-          {/*  </Link>*/}
-          {/*</Tooltip>*/}
           <Tooltip title='همگام سازی'>
             <Button size='small' icon={<Refresh className='p-0.5' />} onClick={() => setExamSyncSelected(record)} />
           </Tooltip>
-          {/*<Tooltip title='پردازش'>*/}
-          {/*  <Popconfirm*/}
-          {/*    title='پردازش'*/}
-          {/*    description='آیا میخواهید آزمون پردازش شود ؟'*/}
-          {/*    onConfirm={() => processExam(record.id)}*/}
-          {/*    okButtonProps={{*/}
-          {/*      loading: confirmProcessLoading,*/}
-          {/*    }}*/}
-          {/*  >*/}
-          {/*    <Button size={'small'} icon={<Gears />} />*/}
-          {/*  </Popconfirm>*/}
-          {/*</Tooltip>*/}
+          <Tooltip title='پردازش'>
+            <Popconfirm
+              title='پردازش'
+              description='آیا میخواهید آزمون پردازش شود ؟'
+              onConfirm={() => processExam(record.id)}
+              okButtonProps={{
+                loading: confirmProcessLoading,
+              }}
+            >
+              <Button size={'small'} icon={<Gears className='p-0.5' />} />
+            </Popconfirm>
+          </Tooltip>
         </div>
       ),
     },
