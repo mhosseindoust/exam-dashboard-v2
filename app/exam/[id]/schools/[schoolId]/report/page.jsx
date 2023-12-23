@@ -34,7 +34,7 @@ async function Page({ params }) {
   return (
     <div>
       {reports.map((data) => (
-        <ReportSection data={data} />
+        <ReportSection key={data.score_id} data={data} />
       ))}
     </div>
   )
