@@ -37,8 +37,10 @@ next-env.d.ts
 
 #
 .idea
+public/dwt-resources/
+public/dbr-resources/
 
 # Sentry Config File
 .sentryclirc
 
-#for some change :
+
