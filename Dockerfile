@@ -11,6 +11,9 @@ WORKDIR /app
 # Copy package files
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
+# Set Verdaccio as the npm registry
+#RUN npm config set registry http://your-verdaccio-server:4873/
+
 # Install dependencies
 # Check the lock file to determine which package manager to use
 RUN \
