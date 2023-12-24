@@ -25,8 +25,8 @@ module.exports = withSentryConfig(
 
     // Suppresses source map uploading logs during build
     silent: true,
-    org: 'exam-nu',
-    project: 'dashboard-nextjs-v2',
+    org: 'mobedu-3fa50bfee',
+    project: 'exam-dashboard-nextjs',
   },
   {
     // For all available options, see:
