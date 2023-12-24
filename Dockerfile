@@ -28,8 +28,8 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Copy dwt and dynamsoft-javascript-barcode resources to public
-RUN cp -r node_modules/dwt/dist public/dwt-resources && \
-    cp -r node_modules/dynamsoft-javascript-barcode/dist public/dbr-resources
+#RUN cp -r node_modules/dwt/dist public/dwt-resources && \
+#    cp -r node_modules/dynamsoft-javascript-barcode/dist public/dbr-resources
 
 # Build the Next.js app
 RUN yarn build
