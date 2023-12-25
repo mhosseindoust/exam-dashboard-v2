@@ -1,5 +1,5 @@
 # Use the base image with Node.js 18
-FROM node:18-alpine AS base
+FROM 192.168.233.230:8081/repository/Docker-mobedu/node:18-alpine AS base
 
 # 1. Install dependencies only when needed
 FROM base AS deps
