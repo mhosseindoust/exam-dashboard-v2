@@ -2,6 +2,7 @@ import React from 'react'
 import { notFound } from 'next/navigation'
 import { cookies } from 'next/headers'
 import ReportSection from '@/exam/[id]/schools/[schoolId]/report/ReportSection'
+import { Result } from 'antd'
 
 async function getExamReport(id, schoolId) {
   const cookie = cookies()
@@ -14,27 +15,25 @@ async function getExamReport(id, schoolId) {
   })
   if (res.status === 404) return notFound()
   if (!res.ok) {
-    let errorMessage = 'Failed to fetch data'
-    try {
-      // Attempt to parse error text from the response
+    if (res.status === 400) {
       const errorText = await res.text()
-      errorMessage = errorText || errorMessage
-    } catch (error) {
-      // If parsing fails, use the default error message
+      return { error: errorText }
     }
 
-    throw new Error(errorMessage)
+    throw new Error('Failed to fetch data')
   }
-  return res.json()
+  return { data: res.json() }
 }
 
 async function Page({ params }) {
   const reports = await getExamReport(params.id, params.schoolId)
 
+  if (reports.error) return <Result status='500' title='500' subTitle={reports.error} />
+
   return (
     <div>
-      {reports.map((data) => (
-        <ReportSection key={data.score_id} data={data} />
+      {reports.data.map((item) => (
+        <ReportSection key={item.score_id} data={item} />
       ))}
     </div>
   )
