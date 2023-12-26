@@ -22,17 +22,16 @@ async function getExamReport(id, schoolId) {
 
     throw new Error('Failed to fetch data')
   }
-  return { data: res.json() }
+  return res.json()
 }
 
 async function Page({ params }) {
   const reports = await getExamReport(params.id, params.schoolId)
 
   if (reports.error) return <Result status='500' title='500' subTitle={reports.error} />
-
   return (
     <div>
-      {reports.data.map((item) => (
+      {reports.map((item) => (
         <ReportSection key={item.score_id} data={item} />
       ))}
     </div>
