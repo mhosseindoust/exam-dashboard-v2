@@ -1,5 +1,5 @@
 # Use the base image with Node.js 18
-FROM nexus.mobedu.ir/repository/docker-mobedu/node:18-alpine AS base
+FROM nexus.coolify.ir/node:18-alpine AS base
 
 # 1. Install dependencies only when needed
 FROM base AS deps
@@ -12,7 +12,7 @@ WORKDIR /app
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
 # Set Verdaccio as the npm registry
-RUN npm config set registry http://192.168.233.230:8081/repository/npm-mobedu/
+RUN npm config set registry https://nexus.coolify.ir/repository/npm/
 
 # Install dependencies
 # Check the lock file to determine which package manager to use
