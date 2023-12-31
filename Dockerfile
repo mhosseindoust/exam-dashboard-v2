@@ -1,5 +1,5 @@
 # Use the base image with Node.js 18
-FROM nexus.coolify.ir/node:18-alpine AS base
+FROM nexus.coolify.ir:8082/node:18-alpine AS base
 
 # 1. Install dependencies only when needed
 FROM base AS deps
