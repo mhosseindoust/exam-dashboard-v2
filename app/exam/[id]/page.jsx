@@ -6,14 +6,10 @@ import { cookies } from 'next/headers'
 import Link from 'next/link'
 import { Button } from 'antd'
 import PageBody from '@/components/PageBody'
+import ExamEditForm from '@/exam/[id]/ExamEditForm'
+import EditLessons from '@/exam/[id]/EditLessons'
+import QuestionList from '@/exam/[id]/QuestionList'
 
-// async function getExam(id) {
-//   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/exam/${id}`)
-//   if (!res.ok) {
-//     throw new Error('Failed to fetch data')
-//   }
-//   return res.json()
-// }
 async function getExam(id) {
   const cookie = cookies()
     .getAll()
@@ -31,16 +27,19 @@ async function getExam(id) {
 }
 
 async function Page({ params }) {
-  const examData = await getExam(params.id)
-  console.log(examData)
+  const exam = await getExam(params.id)
   return (
     <div>
-      <PageHead title={`${examData.title}`} breadcrumbList={[{ title: 'آزمون ها', path: '/exam' }, { title: examData.title }]}>
-        <Link href={`/exam/${examData.id}/paper`}>
+      <PageHead title={`${exam.title}`} breadcrumbList={[{ title: 'آزمون ها', path: '/exam' }, { title: exam.title }]}>
+        <Link href={`/exam/${exam.id}/paper`}>
           <Button>دریافت برگه</Button>
         </Link>
       </PageHead>
-      <PageBody></PageBody>
+      <PageBody withoutLayout>
+        <ExamEditForm exam={exam} />
+        <EditLessons exam={exam} />
+        <QuestionList exam={exam} />
+      </PageBody>
     </div>
   )
 }

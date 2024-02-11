@@ -12,6 +12,7 @@ import LessonsModal from '@/exam/LessonsModal'
 import { Gears, Refresh } from 'react-flaticons'
 import ExamSyncModal from '@/exam/ExamSyncModal'
 import callAxios from '@/helpers/callAxios'
+import ExamCreate from '@/exam/ExamCreate'
 
 function Page(props) {
   const { data, isLoading, error } = useSWR('/exam/')
@@ -108,7 +109,7 @@ function Page(props) {
   return (
     <div>
       <PageHead title='آزمون ها' breadcrumbList={[{ title: 'آزمون ها' }]}>
-        <div></div>
+        <ExamCreate />
       </PageHead>
       <PageBody error={error} loading={isLoading}>
         <Table size={'small'} columns={columns} dataSource={data} rowKey={(record) => record.id} loading={isLoading} />

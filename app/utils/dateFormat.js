@@ -7,3 +7,8 @@ export function UtcToPersianDateTime(dateStr) {
     minute: 'numeric',
   })
 }
+
+export function convertUTCDateToUnix(inputDate) {
+  let date = new Date(inputDate + '+00:00')
+  return date.getTime()
+}
