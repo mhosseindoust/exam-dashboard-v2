@@ -1,37 +1,21 @@
 'use client'
 
 import SectionBuilder from '@/components/SectionBuilder'
-import useSWR from 'swr'
-import { Alert, App, Button, Collapse, Popconfirm, Tabs } from 'antd'
+import useSWR, { useSWRConfig } from 'swr'
+import { Alert, App, Button, Collapse, Tabs } from 'antd'
 import { useState } from 'react'
-import QuestionCreate from '@/exam/[id]/QuestionCreate'
 import _ from 'lodash'
-import { Edit, Spinner, Trash } from 'react-flaticons'
+import { Edit, Trash } from 'react-flaticons'
 import callAxios from '@/helpers/callAxios'
-import QuestionEdit from '@/exam/[id]/QuestionEdit'
+import QuestionModal from '@/exam/[id]/QuestionModal'
 
 const QuestionList = ({ exam }) => {
   const { data, error, isLoading, mutate } = useSWR(`/exam/${exam.id}/questions/`)
+  const [modalState, setModalState] = useState({ visible: false, question: null })
 
-  const [questionCreateVisible, setQuestionCreateVisible] = useState(false)
-  const [questionEdit, SetQuestionEdit] = useState(null)
-  const [deleteLoading, setDeleteLoading] = useState(false)
-
-  const { message } = App.useApp()
-
-  const deleteQuestion = (questionId) => {
-    setDeleteLoading(true)
-    callAxios
-      .delete(`/exam/${exam.id}/questions/${questionId}/`)
-      .then((response) => {
-        message.success('سوال با موفقیت حذف شد')
-        mutate().then(() => setDeleteLoading(false))
-      })
-      .catch((e) => {
-        message.error(e.errorData.msg)
-        setDeleteLoading(false)
-      })
-  }
+  const showCreateModal = () => setModalState({ visible: true, question: null })
+  const showEditModal = (question) => setModalState({ visible: true, question })
+  const closeModal = () => setModalState({ visible: false, question: null })
 
   return (
     <div>
@@ -41,7 +25,7 @@ const QuestionList = ({ exam }) => {
         error={error}
         loading={isLoading}
         empty={data?.length === 0}
-        actions={<Button onClick={() => setQuestionCreateVisible(true)}>ایجاد سوال</Button>}
+        actions={<Button onClick={showCreateModal}>ایجاد سوال</Button>}
       >
         <Tabs
           defaultActiveKey='1'
@@ -51,61 +35,70 @@ const QuestionList = ({ exam }) => {
             .map((value, key) => ({
               label: value[0].exam_lesson.lesson.title,
               key: key,
-              children: (
-                <Collapse
-                  collapsible='icon'
-                  items={value.map((question) => ({
-                    key: question.id,
-                    label: `${question.question_number} - ${question.topic.title} (${question.score} نمره)`,
-                    children: (
-                      <div>
-                        <div dangerouslySetInnerHTML={{ __html: question.question_text }} className='mb-2 ck-content' />
-                        <div className='clear-both'>
-                          <Alert
-                            message={
-                              <div>
-                                <div className='font-bold'>پاسخ :</div>
-                                <div dangerouslySetInnerHTML={{ __html: question.answer_text }} className='ck-content' />
-                              </div>
-                            }
-                            type='info'
-                          />
-                        </div>
-                      </div>
-                    ),
-                    extra: (
-                      <div className='flex self-center items-center space-x-2 space-x-reverse'>
-                        <span className='text-gray-400 text-xs'>{question.type}</span>
-                        <Edit width='1rem' className='cursor-pointer' onClick={() => SetQuestionEdit(question)} />
-
-                        <Popconfirm
-                          title='حذف'
-                          description='میخواهید این سوال را حذف کنید ؟'
-                          onConfirm={() => deleteQuestion(question.id)}
-                          okText='بله'
-                          cancelText='خیر'
-                          okButtonProps={{
-                            loading: deleteLoading,
-                          }}
-                        >
-                          {deleteLoading ? (
-                            <Spinner width='1rem' className='animate-spin fill-gray-500' />
-                          ) : (
-                            <Trash width='1rem' className='cursor-pointer' onClick={() => SetQuestionEdit(question)} />
-                          )}
-                        </Popconfirm>
-                      </div>
-                    ),
-                  }))}
-                />
-              ),
+              children: <QuestionCollapse exam={exam} questions={value} showEditModal={showEditModal} />,
             }))
             .value()}
         />
       </SectionBuilder>
-      <QuestionCreate exam={exam} visible={questionCreateVisible} onClose={() => setQuestionCreateVisible(false)} />
-      <QuestionEdit exam={exam} question={questionEdit} onClose={() => SetQuestionEdit(null)} />
+      {modalState.visible && (
+        <QuestionModal exam={exam} visible={modalState.visible} question={modalState.question} onClose={closeModal} />
+      )}
     </div>
+  )
+}
+
+const QuestionCollapse = ({ exam, questions, showEditModal }) => {
+  const { message, modal } = App.useApp()
+  const { mutate } = useSWRConfig()
+
+  const deleteQuestion = (question) => {
+    modal.confirm({
+      title: 'آیا مطمئن هستید که می خواهید این سوال را حذف کنید؟',
+      okType: 'danger',
+      okText: 'حذف',
+      cancelText: 'خیر',
+      onOk: async () => {
+        try {
+          await callAxios.delete(`/exam/${exam.id}/questions/${question.id}/`)
+          message.success('سوال با موفقیت حذف شد')
+          mutate(`/exam/${exam.id}/questions/`)
+        } catch (error) {
+          message.error(error.errorData ? error.errorData.msg : 'مشکلی پیش آمده است')
+        }
+      },
+    })
+  }
+  return (
+    <Collapse
+      collapsible='icon'
+      items={questions.map((question) => ({
+        key: question.id,
+        label: `${question.question_number} - ${question.topic.title} (${question.score} نمره)`,
+        extra: (
+          <div className='flex self-center items-center space-x-2 space-x-reverse'>
+            <span className='text-gray-400 text-xs'>{question.type}</span>
+            <Button size='small' icon={<Edit width='1rem' />} onClick={() => showEditModal(question)} />
+            <Button size='small' icon={<Trash width='1rem' />} onClick={() => deleteQuestion(question)} />
+          </div>
+        ),
+        children: (
+          <div>
+            <div dangerouslySetInnerHTML={{ __html: question.question_text }} className='mb-2 ck-content' />
+            <div className='clear-both'>
+              <Alert
+                message={
+                  <div>
+                    <div className='font-bold'>پاسخ :</div>
+                    <div dangerouslySetInnerHTML={{ __html: question.answer_text }} className='ck-content' />
+                  </div>
+                }
+                type='info'
+              />
+            </div>
+          </div>
+        ),
+      }))}
+    />
   )
 }
 
