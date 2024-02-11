@@ -71,7 +71,7 @@ const EditLessons = ({ exam }) => {
                   <Form.Item {...restField} label='ضریب' name={[name, 'coefficient']} rules={[{ required: true }]}>
                     <InputNumber min={0} className='w-full' />
                   </Form.Item>
-                  <Form.Item {...restField} label='مدت زمان (دقیقه)' name={[name, 'duration']}>
+                  <Form.Item {...restField} label='مدت زمان (دقیقه)' name={[name, 'duration']} rules={[{ required: true }]}>
                     <InputNumber min={1} className='w-full' />
                   </Form.Item>
                 </div>
