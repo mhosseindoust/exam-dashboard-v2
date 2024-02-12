@@ -11,9 +11,28 @@ WORKDIR /app
 # Copy package files
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
-# Set Verdaccio as the npm registry
+# Set Verdaccio (Nexus) as the npm registry
 RUN npm config set registry http://192.168.0.5:8081/repository/npmg/
 
+# Install dependencies with custom handling for missing packages
+RUN mkdir -p missing_packages && \
+  if [ -f yarn.lock ]; then \
+    yarn install --frozen-lockfile || echo "Yarn install failed, attempting individual package installs" && jq -r '.dependencies + .devDependencies | to_entries[] | .key + "@" + .value' package.json | xargs -n1 yarn add || echo $! >> missing_packages/list.txt; \
+  elif [ -f package-lock.json ]; then \
+    npm ci || echo "npm ci failed, attempting individual package installs" && jq -r '.dependencies + .devDependencies | to_entries[] | .key + "@" + .value' package.json | xargs -n1 npm install || echo $! >> missing_packages/list.txt; \
+  elif [ -f pnpm-lock.yaml ]; then \
+    yarn global add pnpm && pnpm i || echo "pnpm install failed, attempting individual package installs" && jq -r '.dependencies + .devDependencies | to_entries[] | .key + "@" + .value' package.json | xargs -n1 pnpm add || echo $! >> missing_packages/list.txt; \
+  else \
+    echo "Lockfile not found." && exit 1; \
+  fi
+
+# Display the list of missing packages
+RUN if [ -s missing_packages/list.txt ]; then \
+      echo "The following packages were not found:" && \
+      cat missing_packages/list.txt; \
+    else \
+      echo "All packages found and installed successfully."; \
+    fi
 # Install dependencies
 # Check the lock file to determine which package manager to use
 RUN \
