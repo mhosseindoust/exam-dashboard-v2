@@ -17,7 +17,9 @@ COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 RUN npm config set registry http://192.168.0.5:8081/repository/npmg/
 
 # Make the script executable and run it
-RUN chmod +x install_deps.sh && ./install_deps.sh
+RUN jq -r '.dependencies | to_entries[] | .key + "@" + .value' package.json | while read dep; do \
+    npm install "$dep" --registry=http://192.168.0.5:8081/repository/npmg/ || echo "Failed to install $dep, skipping..."; \
+done
 
 # Install dependencies with error handling
 # Check the lock file to determine which package manager to use
