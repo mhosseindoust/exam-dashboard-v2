@@ -38,7 +38,7 @@ const A4Container = ({
 
           {/*<Image alt='paperHeader' src={PaperHeaderImg} sizes='100vw' className={justHeader && 'invisible'} />*/}
           <div className='absolute top-[27px] left-1/2 transform -translate-x-1/2 z-20'>
-            <Barcode value={`${lessonId}-${pageNumber}`} height={7} displayValue={false} />
+            <Barcode value={`${lessonId}-${pageNumber}`} height={15} displayValue={false} />
           </div>
           <div className='absolute top-[34px] left-1/2 transform -translate-x-1/2 '>
             <div className='w-40 h-3 bg-white z-10'></div>

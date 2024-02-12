@@ -100,9 +100,7 @@ const TempComponent = ({ lesson, questions }) => {
       setPages(listPages)
       setFullLoad(true)
     }
-  }, [listQuestions, heightContainer, imagesLoaded, questions])
-
-  useEffect(() => {}, [Pages])
+  }, [listQuestions, heightContainer, imagesLoaded, questions, Pages])
 
   return (
     <div className='flex gap-2'>
