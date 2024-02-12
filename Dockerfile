@@ -12,7 +12,7 @@ WORKDIR /app
 COPY package.json  package-lock.json*  ./
 
 # Set Verdaccio as the npm registry
-RUN npm config set registry http://192.168.0.5:8081/repository/npm/
+RUN npm config set registry http://192.168.0.5:8081/repository/npmg/
 
 # Install dependencies
 # Check the lock file to determine which package manager to use
