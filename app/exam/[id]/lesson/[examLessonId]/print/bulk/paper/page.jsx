@@ -36,7 +36,7 @@ async function Page({ params }) {
   const lesson = await getLesson(params.id, params.examLessonId)
   const questions = await getQuestion(params.id)
 
-  return <TempComponent lesson={lesson} questions={questions.filter((f) => f.exam_lesson_id === params.examLessonId)} />
+  return <TempComponent lesson={lesson} questions={questions.filter((f) => f.exam_lesson_id == params.examLessonId)} />
 }
 
 export default Page

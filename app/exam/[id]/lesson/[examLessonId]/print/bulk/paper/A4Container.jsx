@@ -1,9 +1,9 @@
 import React from 'react'
-import { Barcode } from 'react-flaticons'
 import { digitsEnToFa } from '@persian-tools/persian-tools'
 import PaperHeaderImg from '../../../../../../../../public/images/paper/header.png'
 import classNames from 'classnames'
 import Image from 'next/image'
+import Barcode from 'react-barcode'
 
 const A4Container = ({
   token = '',
@@ -37,10 +37,8 @@ const A4Container = ({
           />
 
           {/*<Image alt='paperHeader' src={PaperHeaderImg} sizes='100vw' className={justHeader && 'invisible'} />*/}
-          <div className={`absolute top-[27px] left-1/2 transform -translate-x-1/2 z-20 ${justHeader && 'invisible'}`}>
-            {lessonId && (
-              <Barcode textMargin={100} value={`${lessonId}-${pageNumber}`} height={7} background={null} displayValue={false} />
-            )}
+          <div className='absolute top-[27px] left-1/2 transform -translate-x-1/2 z-20'>
+            <Barcode value={`${lessonId}-${pageNumber}`} height={7} displayValue={false} />
           </div>
           <div className='absolute top-[34px] left-1/2 transform -translate-x-1/2 '>
             <div className='w-40 h-3 bg-white z-10'></div>
@@ -100,11 +98,7 @@ const A4Container = ({
           </div>
           <div className='absolute bottom-0.5 left-14 text-white'>{lessonTitle}</div>
           <div className='absolute bottom-[30px] left-1/2 transform -translate-x-1/2 '>
-            {examUserId ? (
-              <Barcode value={`-${examUserId}-`} height={10} displayValue={false} />
-            ) : (
-              <div className='h-10 flex items-center justify-center w-72 bg-white'></div>
-            )}
+            <div className='h-10 flex items-center justify-center w-72 bg-white'></div>
           </div>
         </div>
       </header>

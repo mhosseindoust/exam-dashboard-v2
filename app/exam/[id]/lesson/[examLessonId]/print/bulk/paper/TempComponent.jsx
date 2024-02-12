@@ -6,10 +6,6 @@ import PaperSection from '@/exam/[id]/lesson/[examLessonId]/print/bulk/paper/Pap
 
 const TempComponent = ({ lesson, questions }) => {
   const [fullLoad, setFullLoad] = useState(false)
-  const [headers, setHeaders] = useState(null)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [justHeader, setJustHeader] = useState(false)
-
   // =================================================================
   const [heightContainer, setHeightContainer] = useState(0)
   const containerRef = useRef(null)
@@ -104,25 +100,9 @@ const TempComponent = ({ lesson, questions }) => {
       setPages(listPages)
       setFullLoad(true)
     }
-    if (questions.length === 0) {
-      setFullLoad(true)
-    }
   }, [listQuestions, heightContainer, imagesLoaded, questions])
-  // =================================================================
-  const [filterHeaders, setFilterHeaders] = useState([])
-  const [selectedFilterHeaders, setSelectedFilterHeaders] = useState([])
-  useEffect(() => {
-    if (headers) {
-      const groupedObjects = _.groupBy(headers, (obj) => new Date(obj.created_at).toLocaleDateString())
 
-      const objectList = Object.keys(groupedObjects).map((date) => ({
-        value: date,
-        label: new Date(date).toLocaleDateString('fa-IR') + ' (' + groupedObjects[date].length + ')',
-      }))
-      setFilterHeaders(objectList)
-      setSelectedFilterHeaders(Object.keys(groupedObjects))
-    }
-  }, [headers])
+  useEffect(() => {}, [Pages])
 
   return (
     <div className='flex gap-2'>
@@ -130,58 +110,17 @@ const TempComponent = ({ lesson, questions }) => {
         <Button type='primary' block onClick={() => window.print()}>
           چاپ
         </Button>
-
-        {/*<div>*/}
-        {/*  <span>صفحه پرینت:</span>*/}
-        {/*  <Pagination*/}
-        {/*    simple*/}
-        {/*    total={*/}
-        {/*      headers*/}
-        {/*        ? headers.filter((obj) => {*/}
-        {/*            const objDate = new Date(obj.created_at)*/}
-        {/*            const objDateString = objDate.getMonth() + 1 + '/' + objDate.getDate() + '/' + objDate.getFullYear()*/}
-        {/*            return selectedFilterHeaders.includes(objDateString)*/}
-        {/*          }).length*/}
-        {/*        : 1*/}
-        {/*    }*/}
-        {/*    onChange={(e) => setCurrentPage(e)}*/}
-        {/*    current={currentPage}*/}
-        {/*    showTotal={(total, range) => {*/}
-        {/*      return `${range[0]} تا ${range[1]} از ${total} دانش اموز`*/}
-        {/*    }}*/}
-        {/*    defaultPageSize={100}*/}
-        {/*  />*/}
-        {/*</div>*/}
-
-        {/*<div>*/}
-        {/*  <span>فیلتر تاریخ همگام سازی:</span>*/}
-        {/*  <CheckboxGroup*/}
-        {/*    options={filterHeaders}*/}
-        {/*    value={selectedFilterHeaders}*/}
-        {/*    style={{ display: 'grid' }}*/}
-        {/*    onChange={(list) => {*/}
-        {/*      setSelectedFilterHeaders(list)*/}
-        {/*      setCurrentPage(1)*/}
-        {/*    }}*/}
-        {/*  />*/}
-        {/*</div>*/}
-
-        <div>
-          <span>فقط هدر</span>
-          <Switch checked={justHeader} onChange={(e) => setJustHeader(e)} />
-        </div>
+        <Button block onClick={() => setFullLoad(false)}>
+          تنظیم مجدد
+        </Button>
       </div>
       <div className='m-2 print:m-0 p-5 print:p-0 rounded-xl bg-gray-400'>
         <PaperSection
-          justHeader={justHeader}
           questions={questions}
           fullLoad={fullLoad}
-          containerRef={containerRef}
-          currentPage={currentPage}
-          headers={headers}
           Pages={Pages}
           lessonSelected={lesson}
-          selectedFilterHeaders={selectedFilterHeaders}
+          containerRef={containerRef}
           updateQuestionInfo={updateQuestionInfo}
         />
       </div>

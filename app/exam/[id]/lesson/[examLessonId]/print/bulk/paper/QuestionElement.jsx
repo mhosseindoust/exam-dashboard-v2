@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { digitsEnToFa } from '@persian-tools/persian-tools'
+import classNames from 'classnames'
+import Barcode from 'react-barcode'
 
 const QuestionElement = ({ question, updateQuestionInfo, justHeader, extraHeight = 0 }) => {
   const elementRef = useRef(null)
@@ -31,14 +33,15 @@ const QuestionElement = ({ question, updateQuestionInfo, justHeader, extraHeight
       <div ref={elementRef} className={classNames('mb-4 px-2 relative', { invisible: justHeader })}>
         <div className='border-2 border-[#6db0af] border-dashed	rounded-md w-full p-5 flex '>
           <div className='absolute top-[-14px] left-1/2 transform -translate-x-1/2'>
-            {/*{question.id && <Barcode value={question.id.toString()} height={10} displayValue={false} />}*/}
+            <Barcode value={question.id.toString()} height={7} displayValue={false} />
           </div>
           <span className='ml-1'>{digitsEnToFa(question.question_number)}-</span>
           {/*<span> &ensp;-&ensp;</span>*/}
           <div>
             <div dangerouslySetInnerHTML={{ __html: question.question_text }} className='ck-content' />
-            <div style={{ height: `${extraHeight - 5}px` }}></div>
+            {/*<div style={{ height: `${extraHeight}px` }}></div>*/}
           </div>
+          {/*<div style={{ height: `${extraHeight - 5}px` }}></div>*/}
 
           {/*<div className={`h-[${extraHeight}px]`}></div>*/}
         </div>
