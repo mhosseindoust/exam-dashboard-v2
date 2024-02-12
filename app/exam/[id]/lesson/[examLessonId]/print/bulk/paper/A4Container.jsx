@@ -5,23 +5,7 @@ import classNames from 'classnames'
 import Image from 'next/image'
 import Barcode from 'react-barcode'
 
-const A4Container = ({
-  token = '',
-  firstName = '',
-  lastName = '',
-  gradeTitle = '',
-  title = '',
-  duration = '',
-  schoolTitle = '',
-  classRoomTitle = '',
-  lessonTitle = '',
-  pageNumber = 0,
-  examUserId = '',
-  agencyTitle = '',
-  justHeader,
-  lessonId,
-  children,
-}) => {
+const A4Container = ({ lessonTitle = '', pageNumber = 0, lessonId, children }) => {
   return (
     <div className='w-[210mm] h-[297mm] flex flex-col bg-white  px-2 pt-3 pb-2 mb-2 print:mb-0 page'>
       <header className='w-full flex px-2 rounded-lg mb-2'>
@@ -36,7 +20,6 @@ const A4Container = ({
             }}
           />
 
-          {/*<Image alt='paperHeader' src={PaperHeaderImg} sizes='100vw' className={justHeader && 'invisible'} />*/}
           <div className='absolute top-[27px] left-1/2 transform -translate-x-1/2 z-20'>
             <Barcode value={`${lessonId}-${pageNumber}`} height={15} displayValue={false} />
           </div>
@@ -46,53 +29,28 @@ const A4Container = ({
           <div className='absolute grid grid-cols-7 top-14 right-11 gap-1 w-[80%]'>
             <div className='space-y-2 col-span-3'>
               <p>
-                <span className={justHeader && 'invisible'}>نام : </span>
-                <span>{firstName}</span>
+                <span>نام : </span>
               </p>
 
               <p>
-                <span className={justHeader && 'invisible'}>نام خانوادگی : </span>
-                <span>{lastName}</span>
+                <span>نام خانوادگی : </span>
               </p>
 
-              {agencyTitle ? (
-                <p>
-                  <span className={justHeader && 'invisible'}>مدرسه : </span>
-                  <span>
-                    {schoolTitle} ({agencyTitle})
-                  </span>
-                </p>
-              ) : (
-                <p>
-                  <span className={justHeader && 'invisible'}>مدرسه : </span>
-                  <span>{schoolTitle}</span>
-                </p>
-              )}
+              <p>
+                <span>مدرسه : </span>
+              </p>
             </div>
-            <div className='text-center col-span-2'>
-              <p>{title}</p>
-              <p>{token ? `(${token})` : ''}</p>
-            </div>
+            <div className='text-center col-span-2'></div>
             <div className='space-y-2 col-span-2'>
-              {duration ? (
-                <p>
-                  <span className={justHeader && 'invisible'}>مدت : </span>
-                  <span>{digitsEnToFa(duration)} دقیقه</span>
-                </p>
-              ) : (
-                <p>
-                  <span className={justHeader && 'invisible'}>مدت : </span>
-                  <span>{digitsEnToFa(duration)}</span>
-                </p>
-              )}
               <p>
-                <span className={justHeader && 'invisible'}>پایه : </span>
-                <span>{gradeTitle}</span>
+                <span>مدت : </span>
+              </p>
+              <p>
+                <span>پایه : </span>
               </p>
 
               <p>
-                <span className={justHeader && 'invisible'}>کلاس : </span>
-                <span>{digitsEnToFa(classRoomTitle)}</span>
+                <span>کلاس : </span>
               </p>
             </div>
           </div>
@@ -103,7 +61,7 @@ const A4Container = ({
         </div>
       </header>
       {children}
-      <footer className={classNames('flex justify-center items-center', { invisible: justHeader })}>
+      <footer className='flex justify-center items-center'>
         <div className='bg-[#6db0af] rounded-full flex justify-center items-center h-10 w-10'>
           <span className='text-white'>{digitsEnToFa(pageNumber)}</span>
         </div>
