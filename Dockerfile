@@ -14,9 +14,10 @@ COPY package.json  package-lock.json*  ./
 # Set Verdaccio as the npm registry
 RUN npm config set registry http://192.168.0.5:8081/repository/npmg/
 
+RUN npm install -g npm@latest
 # Install dependencies
 # Check the lock file to determine which package manager to use
-RUN npm ci
+RUN npm ci --verbose
 
 
 # 2. Rebuild the source code only when needed
