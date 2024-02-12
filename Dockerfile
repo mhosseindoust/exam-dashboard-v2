@@ -11,8 +11,13 @@ WORKDIR /app
 # Copy package files
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
+
+
 # Set Verdaccio as the npm registry
 RUN npm config set registry http://192.168.0.5:8081/repository/npmg/
+
+# Make the script executable and run it
+RUN chmod +x install_deps.sh && ./install_deps.sh
 
 # Install dependencies with error handling
 # Check the lock file to determine which package manager to use
