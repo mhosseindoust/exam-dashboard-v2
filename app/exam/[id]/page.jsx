@@ -30,11 +30,8 @@ async function Page({ params }) {
   const exam = await getExam(params.id)
   return (
     <div>
-      <PageHead title={`${exam.title}`} breadcrumbList={[{ title: 'آزمون ها', path: '/exam' }, { title: exam.title }]}>
-        <Link href={`/exam/${exam.id}/paper`}>
-          <Button>دریافت برگه</Button>
-        </Link>
-      </PageHead>
+      <PageHead title={`${exam.title}`} breadcrumbList={[{ title: 'آزمون ها', path: '/exam' }, { title: exam.title }]} />
+
       <PageBody withoutLayout>
         <ExamEditForm exam={exam} />
         <EditLessons exam={exam} />

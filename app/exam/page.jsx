@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import PageHead from '@/components/PageHead'
 import PageBody from '@/components/PageBody'
-import { App, Badge, Button, Modal, Popconfirm, Table, Tooltip } from 'antd'
+import { App, Badge, Button, Dropdown, Modal, Popconfirm, Table, Tooltip } from 'antd'
 import useSWR from 'swr'
 import Link from 'next/link'
 import { UtcToPersianDateTime } from '@/utils/dateFormat'
@@ -13,6 +13,7 @@ import { Gears, Refresh } from 'react-flaticons'
 import ExamSyncModal from '@/exam/ExamSyncModal'
 import callAxios from '@/helpers/callAxios'
 import ExamCreate from '@/exam/ExamCreate'
+import { useRouter } from 'next/navigation'
 
 function Page(props) {
   const { data, isLoading, error } = useSWR('/exam/')
@@ -21,6 +22,7 @@ function Page(props) {
   const [confirmProcessLoading, setConfirmProcessLoading] = useState(false)
 
   const { message } = App.useApp()
+  const router = useRouter()
 
   function processExam(exam_id) {
     setConfirmProcessLoading(true)
@@ -86,6 +88,25 @@ function Page(props) {
             <Button size='small'>مدرسه ها</Button>
           </Link>
 
+          {/*<Dropdown.Button*/}
+          {/*  size='small'*/}
+          {/*  menu={{*/}
+          {/*    items: [*/}
+          {/*      {*/}
+          {/*        key: `/exam/${id}/print/bulk/paper`,*/}
+          {/*        label: 'برگه خام',*/}
+          {/*      },*/}
+          {/*      {*/}
+          {/*        key: `/exam/${id}/print/bulk/header`,*/}
+          {/*        label: 'هدر ها',*/}
+          {/*      },*/}
+          {/*    ],*/}
+          {/*    onClick: (e) => router.push(e.key),*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  چاپ*/}
+          {/*</Dropdown.Button>*/}
+
           <Tooltip title='همگام سازی'>
             <Button size='small' icon={<Refresh className='p-0.5' />} onClick={() => setExamSyncSelected(record)} />
           </Tooltip>
@@ -112,7 +133,7 @@ function Page(props) {
         <ExamCreate />
       </PageHead>
       <PageBody error={error} loading={isLoading}>
-        <Table size={'small'} columns={columns} dataSource={data} rowKey={(record) => record.id} loading={isLoading} />
+        <Table size='small' columns={columns} dataSource={data} rowKey={(record) => record.id} loading={isLoading} />
       </PageBody>
       {examLessonSelected && <LessonsModal exam={examLessonSelected} setExam={setExamLessonSelected} />}
       {examSyncSelected && <ExamSyncModal exam={examSyncSelected} setExam={setExamSyncSelected} />}

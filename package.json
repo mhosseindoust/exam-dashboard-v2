@@ -12,6 +12,7 @@
   "dependencies": {
     "@ant-design/cssinjs": "^1.18.0-alpha.5",
     "@ckeditor/ckeditor5-react": "^5.1.0",
+    "@persian-tools/persian-tools": "^3.5.2",
     "antd": "^5.11.4",
     "axios": "^1.6.2",
     "ckeditor5-custom-build": "git+https://github.com/hamedyosefian/ckeditor.git",

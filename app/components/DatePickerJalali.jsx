@@ -45,7 +45,7 @@ export const DateTimePickerJalali = ({ onChange, value }) => {
         format='DD/MM/YYYY HH:mm:ss'
         calendar={persian}
         locale={persian_fa}
-        plugins={[<TimePicker position='bottom' />]}
+        plugins={[<TimePicker position='bottom' key='timePicker' />]}
         style={{
           height: `${token.controlHeight}px`,
           borderRadius: `${token.borderRadius}px`,

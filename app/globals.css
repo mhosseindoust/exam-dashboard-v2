@@ -113,3 +113,17 @@
 body {
     font-family: IRANYekanX, sans-serif;
 }
+
+@media print {
+  header {
+    display: none;
+  }
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  .page {
+    page-break-before: always;
+  }
+}
