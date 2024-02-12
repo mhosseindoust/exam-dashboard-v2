@@ -9,15 +9,19 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Copy package files
-COPY package.json  package-lock.json*  ./
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
 # Set Verdaccio as the npm registry
 RUN npm config set registry http://192.168.0.5:8081/repository/npmg/
 
-RUN npm install -g npm@latest
 # Install dependencies
 # Check the lock file to determine which package manager to use
-RUN npm ci --verbose
+RUN \
+  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+  elif [ -f package-lock.json ]; then npm ci; \
+  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
 
 
 # 2. Rebuild the source code only when needed
