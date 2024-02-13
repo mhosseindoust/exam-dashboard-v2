@@ -43,7 +43,11 @@ function Page(props) {
     {
       title: 'عنوان',
       dataIndex: 'title',
-      render: (_, { id }) => <Link href={`/exam/${id}`}>{_}</Link>,
+      render: (_, { id }) => (
+        <Link href={`/exam/${id}`} prefetch={false}>
+          {_}
+        </Link>
+      ),
     },
     {
       title: 'نوع',
@@ -81,10 +85,10 @@ function Page(props) {
       width: '10%',
       render: (record, { id }) => (
         <div className='flex items-center justify-center gap-3'>
-          <Link href={`/exam/${id}/users`}>
+          <Link href={`/exam/${id}/users`} prefetch={false}>
             <Button size='small'>دانش آموزان</Button>
           </Link>
-          <Link href={`/exam/${id}/schools`}>
+          <Link href={`/exam/${id}/schools`} prefetch={false}>
             <Button size='small'>مدرسه ها</Button>
           </Link>
 
