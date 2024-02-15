@@ -38,7 +38,7 @@ const EditLessons = ({ exam }) => {
       render: (_, { id }) => {
         return (
           <div className='flex gap-5 justify-center items-center'>
-            <Link href={`/exam/${exam.id}/lesson/${id}/print/bulk/paper`}>
+            <Link href={`/exam/${exam.id}/lesson/${id}/print/bulk/paper`} prefetch={false}>
               <Button type='primary' size='small'>
                 چاپ برگه خام
               </Button>
