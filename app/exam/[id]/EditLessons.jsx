@@ -43,9 +43,12 @@ const EditLessons = ({ exam }) => {
               </Button>
             </Link>
 
-            <Button disabled type='primary' size='small'>
-              چاپ سربرگ
-            </Button>
+            <Link href={`/exam/${exam.id}/lesson/${id}/print/bulk/header`} prefetch={false}>
+              <Button type='primary' size='small'>
+                چاپ سربرگ
+              </Button>
+            </Link>
+
             <Button disabled type='primary' size='small'>
               چاپ
             </Button>
