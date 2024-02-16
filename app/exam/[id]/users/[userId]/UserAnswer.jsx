@@ -15,7 +15,6 @@ const UserAnswer = ({ userId, examId }) => {
   const edit = (record) => {
     form.setFieldsValue({ score: record.score })
     setEditingKey(record.id)
-    console.log(record)
   }
 
   const onSubmit = (values) => {

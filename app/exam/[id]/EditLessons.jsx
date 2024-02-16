@@ -10,7 +10,6 @@ import Link from 'next/link'
 
 const EditLessons = ({ exam }) => {
   const { data, error, isLoading, mutate } = useSWRImmutable(`/exam/${exam.id}/lessons`)
-  console.log(data)
   const columns = [
     {
       title: 'ID',

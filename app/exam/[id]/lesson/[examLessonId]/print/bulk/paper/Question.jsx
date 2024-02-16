@@ -4,7 +4,6 @@ import { digitsEnToFa } from '@persian-tools/persian-tools'
 import Barcode from 'react-barcode'
 
 const Question = ({ question, extraSpace = 0 }) => {
-  console.log(extraSpace)
   return (
     <div className='mx-2 mb-4 relative' style={{ height: `${question.height + extraSpace}px` }}>
       <div className=' border-2 border-dashed border-[#6db0af] rounded-md p-3 w-full'>

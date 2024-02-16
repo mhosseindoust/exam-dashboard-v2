@@ -12,7 +12,7 @@ const FOOTER_HEIGHT = 50 // Adjust based on your layout
 const A4_HEIGHT = 1122 // Adjusted A4 height in pixels for 96 DPI
 
 const PaperSection = ({ baseQuestions, examId, examLesson }) => {
-  const { data: questions, mutate } = useSWRImmutable(`/exam/${examId}/lessons/${examLesson.id}`, {
+  const { data: questions, mutate } = useSWRImmutable(`/exam/${examId}/questions/print/?exam_lesson_id=${examLesson.id}`, {
     fallbackData: baseQuestions,
   })
   const [pages, setPages] = useState([])

@@ -24,7 +24,6 @@ function Page({ params }) {
   const edit = (record) => {
     form.setFieldsValue({ score: record.score })
     setEditingKey(record.id)
-    console.log(record)
   }
 
   const onSubmit = (values) => {
@@ -44,8 +43,6 @@ function Page({ params }) {
       })
       .catch((e) => message.error(e.errorData.msg))
       .finally(() => setSubmitLoading(false))
-
-    console.log(values)
   }
 
   const columns = [
