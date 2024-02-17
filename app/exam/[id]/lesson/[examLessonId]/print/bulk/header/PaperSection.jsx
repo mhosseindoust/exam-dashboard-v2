@@ -55,7 +55,7 @@ const Header = ({ examLesson, header, margins, pageNumber }) => {
 
         <div className='absolute top-14 right-12 w-[80%] grid grid-cols-7'>
           <div className='col-span-3'>
-            <p className='mb-3'>
+            <p className='mb-2'>
               <span className='invisible'>نام : </span>
               <span>{digitsEnToFa(header.user.first_name)}</span>
             </p>
@@ -73,7 +73,7 @@ const Header = ({ examLesson, header, margins, pageNumber }) => {
             <p>({digitsEnToFa(header.user.token)})</p>
           </div>
           <div className='col-span-2'>
-            <p className='mb-3'>
+            <p className='mb-2'>
               <span className='invisible'>مدت : </span>
               <span>{digitsEnToFa(examLesson.duration)} دقیقه</span>
             </p>
