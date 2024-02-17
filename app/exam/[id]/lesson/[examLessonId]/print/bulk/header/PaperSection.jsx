@@ -2,28 +2,45 @@
 
 import { digitsEnToFa } from '@persian-tools/persian-tools'
 import Barcode from 'react-barcode'
+import { Badge } from 'antd'
 
 const HEADER_HEIGHT = 230 // Adjust based on your layout
 
 const PaperSection = ({ examLesson, headers, margins }) => {
   if (headers.length === 0) return <div className=' w-[210mm] bg-white'></div>
+
   return (
     <div className='print:bg-white'>
-      {headers.map((header) => (
-        <div key={header.id}>
-          <div className=' w-[210mm] break-before-page bg-white mb-1 print:mb-0'>
-            <Header examLesson={examLesson} header={header} margins={margins} />
+      {headers.map((header, index) => {
+        const firstPageNumber = 1 + index * 2
+        const secondPageNumber = 2 + index * 2
+
+        return (
+          <div key={header.id}>
+            <div className=' w-[210mm] break-before-page bg-white mb-1 print:mb-0'>
+              <Header
+                examLesson={examLesson}
+                header={header}
+                margins={margins}
+                pageNumber={digitsEnToFa(String(firstPageNumber))}
+              />
+            </div>
+            <div className=' w-[210mm] break-before-page bg-white mb-1 print:mb-0'>
+              <Header
+                examLesson={examLesson}
+                header={header}
+                margins={margins}
+                pageNumber={digitsEnToFa(String(secondPageNumber))}
+              />
+            </div>
           </div>
-          <div className=' w-[210mm] break-before-page bg-white mb-1 print:mb-0'>
-            <Header examLesson={examLesson} header={header} margins={margins} />
-          </div>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }
 
-const Header = ({ examLesson, header, margins }) => {
+const Header = ({ examLesson, header, margins, pageNumber }) => {
   const headerStyle = {
     marginRight: margins.right + 'mm',
     marginLeft: margins.left + 'mm',
@@ -76,6 +93,10 @@ const Header = ({ examLesson, header, margins }) => {
 
         <span className='absolute left-1/2 -translate-x-1/2 bottom-7'>
           <Barcode value={`-${header.id}-`} height={15} displayValue={false} />
+        </span>
+
+        <span className='absolute bottom-0 right-0 mr-4 mb-4 print:hidden'>
+          <Badge count={pageNumber} />
         </span>
       </div>
       <div style={{ height: `${margins.bottom}px` }}></div>
