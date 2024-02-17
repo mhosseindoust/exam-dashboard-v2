@@ -65,7 +65,9 @@ const Header = ({ examLesson, header, margins, pageNumber }) => {
             </p>
             <p className='mb-3'>
               <span className='invisible'>مدرسه : </span>
-              <span>{digitsEnToFa(header.user.classroom.school.title)}</span>
+              <span>
+                {digitsEnToFa(header.user.classroom.school.title)} ({digitsEnToFa(header.user.agency.name)})
+              </span>
             </p>
           </div>
           <div className='col-span-2 text-center'>
