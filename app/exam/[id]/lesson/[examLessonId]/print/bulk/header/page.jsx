@@ -15,6 +15,7 @@ function Page({ params }) {
 
   const [agencySelect, setAgencySelect] = useState(null)
   const [syncTimesSelect, setSyncTimesSelect] = useState([])
+  const [margins, setMargins] = useState({ top: 3, right: 3, bottom: 0, left: 0 })
 
   return (
     <div className='flex gap-2'>
@@ -24,6 +25,9 @@ function Page({ params }) {
           setAgencySelect={setAgencySelect}
           headers={headersData?.filter((f) => f.user.agency.id === agencySelect)}
           setSyncTimesSelect={setSyncTimesSelect}
+          setMargins={setMargins}
+          margins={margins}
+          syncTimesSelect={syncTimesSelect}
         />
       </div>
       <div
@@ -43,6 +47,7 @@ function Page({ params }) {
                 return syncTimesSelect.includes(objDateString)
               })}
             examLesson={examLessonData}
+            margins={margins}
           />
         )}
       </div>
