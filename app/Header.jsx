@@ -6,7 +6,7 @@ import UserAvatar from '/public/images/default/user.jpg'
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { App, Button, Divider } from 'antd'
-import { BarcodeScan, ClipboardList, Dashboard, ListCheck, SignOutAlt, Test } from 'react-flaticons'
+import { BarcodeScan, ClipboardList, Dashboard, ListCheck, Print, SignOutAlt, Test } from 'react-flaticons'
 import callAxios from '@/helpers/callAxios'
 import { usePathname, useRouter } from 'next/navigation'
 import { useAuth } from '@/provider/AuthProvider'
@@ -23,6 +23,7 @@ function Header(props) {
     { label: 'داشبورد', key: '/', icon: <Dashboard /> },
     { label: 'آزمون ها', key: '/exam', icon: <ClipboardList />, access_type: 'is_staff' },
     { label: 'اسکن', key: '/scan', icon: <BarcodeScan />, access_type: 'is_staff' },
+    { label: 'اسکن دسته ای', key: '/scan/bulk', icon: <Print />, access_type: 'is_staff' },
   ]
 
   const filteredMenuItems = menuItems.filter((item) => {
@@ -32,7 +33,11 @@ function Header(props) {
     return true
   })
   const isMenuItemActive = (key) => {
-    return key === '/' ? pathname === key : pathname.startsWith(key)
+    if (pathname === key) {
+      return true
+    }
+    // return pathname.startsWith(key) && (pathname[key.length] === '/' || pathname[key.length] === undefined)
+    // return key === '/' ? pathname === key : pathname.startsWith(key)
   }
 
   return (
