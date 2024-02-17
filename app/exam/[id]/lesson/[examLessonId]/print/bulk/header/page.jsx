@@ -15,7 +15,9 @@ function Page({ params }) {
 
   const [agencySelect, setAgencySelect] = useState(null)
   const [syncTimesSelect, setSyncTimesSelect] = useState([])
-  const [margins, setMargins] = useState({ top: 3, right: 3, bottom: 0, left: 0 })
+
+  // Todo this values to 0 and remove margin tag p in paper section
+  const [margins, setMargins] = useState({ top: 4, right: 4, bottom: 0, left: 0 })
 
   return (
     <div className='flex gap-2'>
