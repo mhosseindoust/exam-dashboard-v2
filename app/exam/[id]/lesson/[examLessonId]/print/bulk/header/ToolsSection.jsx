@@ -19,10 +19,10 @@ const ToolsSection = ({ agencyList, setAgencySelect, headers, setSyncTimesSelect
     .value()
 
   useEffect(() => {
-    if (syncTimeOptions.length === 1) {
+    if (syncTimeOptions.length === 1 && syncTimesSelect[0] !== syncTimeOptions[0].value) {
       setSyncTimesSelect([syncTimeOptions[0].value])
     }
-  }, [syncTimeOptions])
+  }, [syncTimeOptions, syncTimesSelect])
 
   return (
     <div style={{ padding: '10px', border: '1px solid #f0f0f0', borderRadius: '5px' }}>
