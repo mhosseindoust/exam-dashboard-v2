@@ -19,6 +19,8 @@ function Page({ params }) {
   // Todo this values to 0 and remove margin tag p in paper section
   const [margins, setMargins] = useState({ top: 10, right: 4, bottom: 0, left: 0 })
 
+  const [repeatHeader, setRepeatHeader] = useState(2)
+
   return (
     <div className='flex gap-2'>
       <div className='m-2 p-5 rounded-xl bg-gray-400 w-full print:hidden'>
@@ -30,6 +32,8 @@ function Page({ params }) {
           setMargins={setMargins}
           margins={margins}
           syncTimesSelect={syncTimesSelect}
+          repeatHeader={repeatHeader}
+          setRepeatHeader={setRepeatHeader}
         />
       </div>
       <div
@@ -50,6 +54,7 @@ function Page({ params }) {
               })}
             examLesson={examLessonData}
             margins={margins}
+            repeatHeader={repeatHeader}
           />
         )}
       </div>

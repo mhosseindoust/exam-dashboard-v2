@@ -6,32 +6,23 @@ import { Badge } from 'antd'
 
 const HEADER_HEIGHT = 230 // Adjust based on your layout
 
-const PaperSection = ({ examLesson, headers, margins }) => {
+const PaperSection = ({ examLesson, headers, margins, repeatHeader }) => {
+  const repeatItems = (array, repeatCount) => {
+    return array.reduce((acc, item) => {
+      const repeatedItems = Array.from({ length: repeatCount }, () => ({ ...item }))
+      return acc.concat(repeatedItems)
+    }, [])
+  }
+
   if (headers.length === 0) return <div className=' w-[210mm] bg-white'></div>
 
   return (
     <div className='print:bg-white'>
-      {headers.map((header, index) => {
-        const firstPageNumber = 1 + index * 2
-        const secondPageNumber = 2 + index * 2
-
+      {repeatItems(headers, repeatHeader).map((header, index) => {
         return (
-          <div key={header.id}>
+          <div key={`${header.id}-${index}`}>
             <div className=' w-[210mm] break-before-page bg-white mb-1 print:mb-0'>
-              <Header
-                examLesson={examLesson}
-                header={header}
-                margins={margins}
-                pageNumber={digitsEnToFa(String(firstPageNumber))}
-              />
-            </div>
-            <div className=' w-[210mm] break-before-page bg-white mb-1 print:mb-0'>
-              <Header
-                examLesson={examLesson}
-                header={header}
-                margins={margins}
-                pageNumber={digitsEnToFa(String(secondPageNumber))}
-              />
+              <Header examLesson={examLesson} header={header} margins={margins} pageNumber={index + 1} />
             </div>
           </div>
         )
@@ -98,7 +89,7 @@ const Header = ({ examLesson, header, margins, pageNumber }) => {
         </span>
 
         <span className='absolute bottom-0 right-0 mr-4 mb-4 print:hidden'>
-          <Badge count={pageNumber} />
+          <Badge count={digitsEnToFa(pageNumber)} />
         </span>
       </div>
       <div style={{ height: `${margins.bottom}px` }}></div>

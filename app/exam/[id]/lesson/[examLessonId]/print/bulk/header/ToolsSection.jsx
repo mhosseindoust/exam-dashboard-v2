@@ -5,7 +5,17 @@ import _ from 'lodash'
 
 const { Title, Text } = Typography
 
-const ToolsSection = ({ agencyList, setAgencySelect, headers, setSyncTimesSelect, setMargins, margins, syncTimesSelect }) => {
+const ToolsSection = ({
+  agencyList,
+  setAgencySelect,
+  headers,
+  setSyncTimesSelect,
+  setMargins,
+  margins,
+  syncTimesSelect,
+  repeatHeader,
+  setRepeatHeader,
+}) => {
   const handleMarginChange = (value, type) => {
     setMargins((prev) => ({ ...prev, [type]: value }))
   }
@@ -36,7 +46,6 @@ const ToolsSection = ({ agencyList, setAgencySelect, headers, setSyncTimesSelect
         fieldNames={{ label: 'name', value: 'id' }}
         onChange={(e) => setAgencySelect(e)}
       />
-
       <Title level={5}>تنظیمات حاشیه</Title>
       <Row gutter={16}>
         <Col span={6}>
@@ -84,6 +93,10 @@ const ToolsSection = ({ agencyList, setAgencySelect, headers, setSyncTimesSelect
           value={syncTimesSelect}
           onChange={(e) => setSyncTimesSelect(e)}
         />
+      </div>
+      <div className='mt-4'>
+        <Title level={5}>تکرار هر کاربر</Title>
+        <InputNumber style={{ width: '100%' }} min={1} value={repeatHeader} onChange={(value) => setRepeatHeader(value)} />
       </div>
     </div>
   )
