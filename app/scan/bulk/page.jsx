@@ -13,7 +13,8 @@ const DWT = dynamic(() => import('../../components/DWT'), {
 export default function Page(props) {
   const [uploads, setUploads] = useState([])
   const [finishScan, setFinishScan] = useState(false)
-  const [partId, setPartId] = useState(null)
+
+  const partId = useRef(null)
 
   const DWObjectRef = useRef(null)
 
@@ -62,10 +63,11 @@ export default function Page(props) {
     setFinishScan(false)
     setUploads([])
     DWObject.RemoveAllImages()
+    partId.current = null
     callAxios
-      .post('')
+      .post('/exam/scan-part/')
       .then((res) => {
-        setPartId(res.data)
+        partId.current = res.data
         DWObject.AcquireImage(
           deviceConfiguration,
           (e) => setFinishScan(true),
@@ -74,7 +76,21 @@ export default function Page(props) {
       })
       .catch((e) => console.log(e))
   }
-  console.log('---')
+
+  const uploadImage = (compressedBlob, imageId) => {
+    const formData = new FormData()
+    formData.append('file', compressedBlob, `${imageId}.jpg`)
+
+    callAxios
+      .post(`/exam/scan-part/${partId.current}/paper`, formData)
+      .then((response) => {
+        updateUploadStatus(imageId, 'success')
+      })
+      .catch((error) => {
+        updateUploadStatus(imageId, 'failed')
+      })
+  }
+
   const handleWebTWAINReady = (DWObject) => {
     DWObjectRef.current = DWObject
     DWObject.RegisterEvent('OnPostTransferAsync', function (outputInfo) {
@@ -89,17 +105,7 @@ export default function Page(props) {
           new Compressor(blob, {
             quality: 0.4,
             success(compressedBlob) {
-              const formData = new FormData()
-              formData.append('file', compressedBlob, `${outputInfo.imageId}.jpg`)
-
-              callAxios
-                .post(`/scan-part/${partId}/paper`, formData)
-                .then((response) => {
-                  updateUploadStatus(outputInfo.imageId, 'success')
-                })
-                .catch((error) => {
-                  updateUploadStatus(outputInfo.imageId, 'failed')
-                })
+              uploadImage(compressedBlob, outputInfo.imageId)
             },
             error: (err) => {
               updateUploadStatus(outputInfo.imageId, 'failed')
@@ -107,7 +113,6 @@ export default function Page(props) {
           })
         },
         function (errorCode, errorString) {
-          console.log(errorString)
           updateUploadStatus(outputInfo.imageId, 'failed')
         },
       )
