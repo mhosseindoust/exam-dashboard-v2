@@ -24,6 +24,7 @@ function Header(props) {
     { label: 'آزمون ها', key: '/exam', icon: <ClipboardList />, access_type: 'is_staff' },
     { label: 'اسکن', key: '/scan', icon: <BarcodeScan />, access_type: 'is_staff' },
     { label: 'اسکن دسته ای', key: '/scan/bulk', icon: <Print />, access_type: 'is_staff' },
+    { label: 'دسته ها', key: '/scan/parts', icon: <ListCheck />, access_type: 'is_staff' },
   ]
 
   const filteredMenuItems = menuItems.filter((item) => {
