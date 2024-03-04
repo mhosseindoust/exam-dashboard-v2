@@ -27,6 +27,8 @@ function Page(props) {
       title: 'مشکل دار',
       dataIndex: 'papers',
       render: (_) => _.filter((f) => !f.is_success).length,
+      sorter: (a, b) => a.papers.filter((f) => !f.is_success).length - b.papers.filter((f) => !f.is_success).length,
+      defaultSortOrder: 'descend',
     },
     {
       title: 'کل برگه ها',
