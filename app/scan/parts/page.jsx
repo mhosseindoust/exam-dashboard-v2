@@ -10,8 +10,10 @@ function Page(props) {
   const { data, isLoading, error } = useSWR('/exam/scan-part/')
   const columns = [
     {
-      title: 'Id',
+      title: 'ID',
       dataIndex: 'id',
+      sorter: (a, b) => a.id - b.id,
+      defaultSortOrder: 'descend',
     },
     {
       title: 'زمان ایجاد',
@@ -28,7 +30,6 @@ function Page(props) {
       dataIndex: 'papers',
       render: (_) => _.filter((f) => !f.is_success).length,
       sorter: (a, b) => a.papers.filter((f) => !f.is_success).length - b.papers.filter((f) => !f.is_success).length,
-      defaultSortOrder: 'descend',
     },
     {
       title: 'کل برگه ها',
@@ -40,7 +41,7 @@ function Page(props) {
       width: 100,
       render: (_, { id }) => {
         return (
-          <div className='flex gap-5 justify-center items-center'>
+          <div className='flex gap-5 justify-center items-center '>
             <Link href={`/scan/parts/${id}`} prefetch={false}>
               <Button type='primary' size='small'>
                 بررسی برگه ها
@@ -55,7 +56,15 @@ function Page(props) {
     <div>
       <PageHead title='دسته های اسکن' breadcrumbList={[{ title: 'دسته های اسکن' }]} />
       <PageBody error={error} loading={isLoading}>
-        <Table size='small' columns={columns} dataSource={data} rowKey={(record) => record.id} loading={isLoading} />
+        <Table
+          size='small'
+          columns={columns}
+          dataSource={data}
+          rowKey={(record) => record.id}
+          loading={isLoading}
+          pagination={{ pageSize: 100 }}
+          rowClassName={(record) => (record.papers.some((paper) => !paper.is_success) ? 'bg-red-300' : '')}
+        />
       </PageBody>
     </div>
   )
