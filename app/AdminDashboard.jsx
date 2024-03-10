@@ -65,6 +65,62 @@ const AdminDashboard = ({ user }) => {
             }}
           />
         </SectionBuilder>
+        <div className='md:grid md:grid-cols-2 md:gap-3'>
+          {data.map((exam) => (
+            <SectionBuilder className='p-3 h-96'>
+              <Doughnut
+                data={{
+                  labels: ['تصحیح شده', 'تصحیح نشده'],
+                  datasets: [
+                    {
+                      data: [exam.user_question_corrected_count, exam.user_question_not_corrected_count],
+                      backgroundColor: ['#17A34A', '#3F0ECC'],
+                      // backgroundColor: Object.values({
+                      //   red: 'rgb(255, 99, 132)',
+                      //   orange: 'rgb(255, 159, 64)',
+                      //   yellow: 'rgb(255, 205, 86)',
+                      //   green: 'rgb(75, 192, 192)',
+                      //   blue: 'rgb(54, 162, 235)',
+                      //   purple: 'rgb(153, 102, 255)',
+                      //   grey: 'rgb(201, 203, 207)',
+                      // }),
+                      borderColor: '#fff',
+                      borderWidth: 2,
+                    },
+                  ],
+                }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'left',
+                    },
+                    title: {
+                      display: true,
+                      text: exam.title,
+                      font: {
+                        size: 16,
+                      },
+                      padding: {
+                        bottom: 30,
+                      },
+                    },
+                    tooltip: {
+                      rtl: true,
+                    },
+                    datalabels: {
+                      color: '#444',
+                      textAlign: 'center',
+                      anchor: 'center',
+                      align: 'center',
+                    },
+                  },
+                }}
+              />
+            </SectionBuilder>
+          ))}
+        </div>
       </div>
     </div>
   )
