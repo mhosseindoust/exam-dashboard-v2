@@ -66,8 +66,8 @@ const AdminDashboard = ({ user }) => {
           />
         </SectionBuilder>
         <div className='md:grid md:grid-cols-2 md:gap-3'>
-          {data.map((exam) => (
-            <SectionBuilder className='p-3 h-96'>
+          {data.map((exam, index) => (
+            <SectionBuilder key={index} className='p-3 h-96'>
               <Doughnut
                 data={{
                   labels: ['تصحیح شده', 'تصحیح نشده'],
