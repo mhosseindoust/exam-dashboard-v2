@@ -110,6 +110,9 @@ const TextEditor = ({ value, onChange, placeholder }) => {
               'imageStyle:alignCenter',
               'linkImage',
             ],
+            // insert: {
+            //   type: 'inline',
+            // },
           },
           style: {
             definitions: [],

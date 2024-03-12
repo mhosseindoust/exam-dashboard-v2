@@ -26,6 +26,12 @@
     font-family: IRANYekanX, sans-serif;
 }
 
+.ck-content img {
+    display: inline-block;
+    max-width: 100%;
+    height: auto;
+}
+
 /* @ckeditor/ckeditor5-table/theme/tablecolumnresize.css */
 .ck-content .table .ck-table-resized {
     table-layout: fixed;
@@ -306,7 +312,7 @@
 }
 /* @ckeditor/ckeditor5-image/theme/image.css */
 .ck-content .image img {
-    display: block;
+    display: flex;
     margin: 0 auto;
     max-width: 100%;
     min-width: 100%;

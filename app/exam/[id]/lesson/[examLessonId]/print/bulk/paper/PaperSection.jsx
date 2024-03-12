@@ -26,13 +26,12 @@ const PaperSection = ({ baseQuestions, examId, examLesson }) => {
       const availableHeight = A4_HEIGHT - HEADER_HEIGHT - FOOTER_HEIGHT // Calculate available space for questions
 
       questions.forEach((question) => {
-        console.log(pageNumber, currentPageHeight)
         if (currentPageHeight + question.height_with_margin <= availableHeight) {
           currentPageQuestions.push(question)
           currentPageHeight += question.height_with_margin
         } else {
           const emptySpace = availableHeight - currentPageHeight
-          tempPages.push({ number: pageNumber, questions: currentPageQuestions, emptySpace })
+          tempPages.push({ number: pageNumber, questions: currentPageQuestions, emptySpace: emptySpace })
           pageNumber++ // Move to the next page number
           currentPageQuestions = [question] // Start new page with current question
           currentPageHeight = question.height_with_margin // Reset page height to current question's height
@@ -42,7 +41,7 @@ const PaperSection = ({ baseQuestions, examId, examLesson }) => {
       // Add the last page if it has any questions
       if (currentPageQuestions.length > 0) {
         const emptySpace = availableHeight - currentPageHeight
-        tempPages.push({ number: pageNumber, questions: currentPageQuestions, emptySpace })
+        tempPages.push({ number: pageNumber, questions: currentPageQuestions, emptySpace: emptySpace })
       }
 
       setPages(tempPages)
@@ -76,7 +75,13 @@ const PaperSection = ({ baseQuestions, examId, examLesson }) => {
         >
           {page.questions.map((question) => {
             return (
-              <Question key={question.id} question={question} extraSpace={Math.floor(page.emptySpace / page.questions.length)} />
+              <Question
+                key={question.id}
+                examId={examId}
+                examLessonId={examLesson.id}
+                question={question}
+                extraSpace={Math.floor(page.emptySpace / page.questions.length)}
+              />
             )
           })}
         </A4Container>
