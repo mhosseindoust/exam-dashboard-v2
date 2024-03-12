@@ -1,13 +1,12 @@
 import { ConfigProvider as AntdConfigProvider, Spin, App as AntdApp } from 'antd'
 import faIR from 'antd/locale/fa_IR'
 import './globals.css'
-import { SWRConfig } from 'swr'
-import callAxios from '@/helpers/callAxios'
-import StyledComponentsRegistry from '@/provider/AntdProvider'
+import './ckeditor.css'
 import { SWRProvider } from '@/provider/SwrProvider'
 import Header from '@/Header'
 import { AuthProvider } from '@/provider/AuthProvider'
 import StyledJsxProvider from '@/provider/StyledJsxProvider'
+import { AntdRegistry } from '@ant-design/nextjs-registry'
 
 export const metadata = {
   title: 'Create Next App',
@@ -18,7 +17,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang='fa' dir='rtl'>
       <body id='app'>
-        <StyledComponentsRegistry>
+        <AntdRegistry>
           <AntdConfigProvider
             direction='rtl'
             locale={faIR}
@@ -51,7 +50,7 @@ export default function RootLayout({ children }) {
               </SWRProvider>
             </StyledJsxProvider>
           </AntdConfigProvider>
-        </StyledComponentsRegistry>
+        </AntdRegistry>
       </body>
     </html>
   )

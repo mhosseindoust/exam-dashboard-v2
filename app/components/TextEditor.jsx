@@ -31,6 +31,7 @@ const TextEditor = ({ value, onChange, placeholder }) => {
       }
     }
   }
+
   return (
     <div>
       <CKEditor
@@ -43,6 +44,61 @@ const TextEditor = ({ value, onChange, placeholder }) => {
         config={{
           placeholder: `${placeholder ? placeholder : 'متن خود را وارد کنید ...'}`,
           extraPlugins: [MyCustomUploadAdapterPlugin],
+          toolbar: {
+            items: [
+              'heading',
+              '|',
+              'bold',
+              'italic',
+              'underline',
+              'link',
+              'bulletedList',
+              'numberedList',
+              '|',
+              'fontBackgroundColor',
+              'fontColor',
+              'fontFamily',
+              'fontSize',
+              '|',
+              'MathType',
+              'ChemType',
+              '|',
+              'alignment',
+              'outdent',
+              'indent',
+              '|',
+              'blockQuote',
+              'insertTable',
+              'undo',
+              'redo',
+              '|',
+              'sourceEditing',
+              '|',
+              'style',
+              '|',
+              'specialCharacters',
+              '|',
+              'highlight',
+              'horizontalLine',
+              'htmlEmbed',
+              'imageInsert',
+              'pageBreak',
+              'removeFormat',
+              'restrictedEditingException',
+              'strikethrough',
+              'subscript',
+              'todoList',
+              'superscript',
+              'findAndReplace',
+              'codeBlock',
+              'code',
+              'mediaEmbed',
+              'imageUpload',
+            ],
+          },
+          style: {
+            definitions: [],
+          },
         }}
       />
     </div>

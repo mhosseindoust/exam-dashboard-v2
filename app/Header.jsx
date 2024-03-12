@@ -43,9 +43,9 @@ function Header(props) {
 
   return (
     <header className='bg-primary print:hidden'>
-      <div className='container justify-between items-center py-2.5 flex  '>
+      <div className='container justify-between items-center py-2.5 flex'>
         <div className='flex items-center flex-1'>
-          <Link href='/'>
+          <Link href='/' className='ml-10'>
             <Image src={LogoImage} alt='logo image' width={100} />
           </Link>
           <ul className='flex  gap-2 list-none items-center mt-auto mb-0'>

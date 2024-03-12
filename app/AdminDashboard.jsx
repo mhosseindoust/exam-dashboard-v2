@@ -112,7 +112,7 @@ const AdminDashboard = ({ user }) => {
                         rtl: true,
                       },
                       datalabels: {
-                        color: '#444',
+                        color: '#ffffff',
                         textAlign: 'center',
                         anchor: 'center',
                         align: 'center',

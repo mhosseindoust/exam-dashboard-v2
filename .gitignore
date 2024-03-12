@@ -43,4 +43,4 @@ public/dbr-resources/
 # Sentry Config File
 .sentryclirc
 
-
+/ckeditor5/node_modules
