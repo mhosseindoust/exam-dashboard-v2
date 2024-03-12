@@ -96,6 +96,21 @@ const TextEditor = ({ value, onChange, placeholder }) => {
               'imageUpload',
             ],
           },
+          image: {
+            toolbar: [
+              'imageTextAlternative',
+              'toggleImageCaption',
+              'imageStyle:inline',
+              'imageStyle:block',
+              'imageStyle:side',
+              'imageStyle:alignLeft',
+              'imageStyle:alignRight',
+              'imageStyle:alignBlockLeft',
+              'imageStyle:alignBlockRight',
+              'imageStyle:alignCenter',
+              'linkImage',
+            ],
+          },
           style: {
             definitions: [],
           },
