@@ -36,7 +36,7 @@ async function Page({ params }) {
     <div>
       <PageHead
         // title={`${report.user.full_name}-${report.user.username}-${report.school.title}-${report.classroom.title}-${report.exam.title}`}
-        title={`مدرسه ${report.school.title} کلاس - ${report.classroom.title}`}
+        title={report.exam.title}
         breadcrumbList={[{ title: 'آزمون ها', path: '/exam' }, { title: report.exam.title }]}
       />
 
